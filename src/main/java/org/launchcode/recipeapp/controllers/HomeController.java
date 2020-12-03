@@ -31,11 +31,9 @@ public class HomeController {
       List<Recipe> recipes = new ArrayList<>();
       Iterable<Recipe> all = recipeRepository.findAll();
       all.forEach(recipes::add);
-
       model.addAttribute("recipes", recipes);
 
       return "index";
    }
-
 
 }
