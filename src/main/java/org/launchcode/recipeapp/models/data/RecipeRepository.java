@@ -1,4 +1,4 @@
-package org.launchcode.recipeapp.data;
+package org.launchcode.recipeapp.models.data;
 
 import org.launchcode.recipeapp.models.Recipe;
 import org.springframework.data.repository.CrudRepository;
