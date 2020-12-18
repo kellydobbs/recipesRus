@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,14 @@ public class Recipe extends AbstractEntity {
 
    private String name;
 
+   @OneToMany(mappedBy = "recipe")
    @NotNull(message = "Ingredients required")
-   private String ingredients;
+   private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 
    private String directions;
+
+   @OneToMany(mappedBy = "recipe")
+   private List<Instruction> instructions = new ArrayList<Instruction>();
 
    @NotNull(message = "Category required")
    private Category category;
@@ -67,11 +72,12 @@ public class Recipe extends AbstractEntity {
       this.img = img;
    }
 
-   public String getIngredients() {
+
+   public List<Ingredient> getIngredients() {
       return ingredients;
    }
 
-   public void setIngredients(String ingredients) {
+   public void setIngredients(List<Ingredient> ingredients) {
       this.ingredients = ingredients;
    }
 
@@ -89,5 +95,13 @@ public class Recipe extends AbstractEntity {
 
    public void setTag(Tag tag) {
       this.tag = tag;
+   }
+
+   public List<Instruction> getInstructions() {
+      return instructions;
+   }
+
+   public void setInstructions(List<Instruction> instructions) {
+      this.instructions = instructions;
    }
 }

@@ -20,4 +20,12 @@ public class ActiveRecipeDTO {
    public boolean isActive() {
       return isActive;
    }
+
+   public void setRecipe(Recipe recipe) {
+      this.recipe = recipe;
+   }
+
+   public void setActive(boolean active) {
+      isActive = active;
+   }
 }
