@@ -28,14 +28,22 @@ public class SearchController {
 
     @PostMapping(value="/results")
     public String searchByKeyword(Model model, @RequestParam String keyword) {
+        String lower_val = keyword.toLowerCase();
 
         List<Recipe> recipeList = new ArrayList<>();
         Iterable<Recipe> recipesIter = recipeRepository.findAll();
         recipesIter.forEach(recipeList::add);
         List<Recipe> foundRecipes = new ArrayList<>();
         for (Recipe recipe : recipeList) {
-            if (recipe.getName().toLowerCase().contains(keyword.toLowerCase())) {
+            if (recipe.getName().toLowerCase().contains(lower_val)) {
                 foundRecipes.add(recipe);
+            } else if (recipe.getIngredients().toLowerCase().contains(lower_val)) {
+                foundRecipes.add(recipe);
+            } else if (recipe.getDirections().toLowerCase().contains(lower_val)) {
+                foundRecipes.add(recipe);
+            } else if (recipe.getCategory().toString().toLowerCase().contains(lower_val)) {
+                foundRecipes.add(recipe);
+
             }
         }
         model.addAttribute("recipes", foundRecipes);
@@ -57,5 +65,7 @@ public class SearchController {
     }
         return "search";
     }
+
+
 
 }
