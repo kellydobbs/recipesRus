@@ -19,7 +19,11 @@ public class SearchController {
     @Autowired
     private RecipeRepository recipeRepository;
 
-
+    @GetMapping("")
+    public String renderSearch(Model model) {
+        model.addAttribute("categories", Category.values());
+        return "search";
+    }
 
 
     @PostMapping(value="/results")
@@ -35,18 +39,21 @@ public class SearchController {
             }
         }
         model.addAttribute("recipes", foundRecipes);
+        model.addAttribute("categories", Category.values());
         return "search";
     }
 
     @PostMapping(value= "/selectedCategory")
-    public String getRecipeByCategory(@ModelAttribute Category category, Model model){
+    public String getRecipeByCategory(@RequestParam Category category, Model model){
         Iterable<Recipe> recipes = recipeRepository.findAll();
         List<Recipe> recipeByCategory = new ArrayList<>();
         for (Recipe recipe:recipes) {
-        if(recipe.getCategory().name().equals(category.name())){
+        if(recipe.getCategory().name().toLowerCase().equals(category.name().toLowerCase())){
             recipeByCategory.add(recipe);
         }
         model.addAttribute("recipes", recipeByCategory);
+        model.addAttribute("categories", Category.values());
+
     }
         return "search";
     }

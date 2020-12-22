@@ -1,6 +1,7 @@
 package org.launchcode.recipeapp.controllers;
 
 
+import org.launchcode.recipeapp.models.Category;
 import org.launchcode.recipeapp.models.User;
 import org.launchcode.recipeapp.models.UserRecipe;
 import org.launchcode.recipeapp.models.data.RecipeRepository;
@@ -36,7 +37,7 @@ public class HomeController {
    public String home(Model model, HttpServletRequest request) {
       User user = (User) request.getSession().getAttribute("user");
       model.addAttribute("title", "Saint Louis Best Recipes");
-
+      model.addAttribute("categories", Category.values());
       List<ActiveRecipeDTO> recipes = new ArrayList<>();
       Iterable<Recipe> all = recipeRepository.findAll();
 

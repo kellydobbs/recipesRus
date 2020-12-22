@@ -1,5 +1,6 @@
 package org.launchcode.recipeapp.controllers;
 
+import org.launchcode.recipeapp.models.Category;
 import org.launchcode.recipeapp.models.data.UserRepository;
 import org.launchcode.recipeapp.models.dto.LoginFormDTO;
 import org.launchcode.recipeapp.models.User;
@@ -78,6 +79,7 @@ AuthenticationController {
     public String displayLoginForm(Model model) {
         model.addAttribute(new LoginFormDTO());
         model.addAttribute("title", "Log In");
+        model.addAttribute("categories", Category.values());
         return "login";
     }
 
