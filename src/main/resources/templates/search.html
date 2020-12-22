@@ -4,19 +4,19 @@
 <body>
 <div th:replace="fragments :: header"></div>
 
+<div class="container-fluid">
 
-<h1 th:text="'Recipes found based on keyword'"></h1>
-<!--<h2 th:unless="${keyword}">All Recipes</h2>-->
-<p>Click on the recipe name to view recipe details</p>
+<h1 class="title-recipes" th:text="'Found Recipes'"></h1>
 
-<div class = "container">
     <div class="row">
-        <div th:each="recipe:${recipes}">
+        <div class="col-3" th:each="recipe:${recipes}">
 
-            <figcaption>
-                <a th:text="${recipe.name}" th:href="'/recipes/display?recipeId=' + ${recipe.id}"></a>
-            </figcaption>
-            <img th:src="${recipe.img}" width="304" height="236"/>
+            <div style="background-color: #fefacd">
+                <img class="img-med" th:src="${recipe.img}"/>
+            </div>
+            <table class="table">
+                <a style="margin:center" th:text="${recipe.name}" th:href="'/recipes/display?recipeId=' + ${recipe.id}"></a>
+            </table>
 
         </div>
     </div>
