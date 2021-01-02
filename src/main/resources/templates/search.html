@@ -4,9 +4,22 @@
 <body>
 <div th:replace="fragments :: header"></div>
 
+
 <div class="container-fluid">
 
 <h1 class="title-recipes" th:text="'Found Recipes'"></h1>
+
+    <form class="dropdown" action="/search" method="post" th:object="${recipe}">
+        <select class="dropbtn" name="sort">
+        <option class = "dropdown-content">Sort By: </option>
+        <option th:each="sortValue:${sort}"
+                th:value="${sortValue}"
+                th:text="${sortValue}">
+        </option>
+        </select>
+
+    </form>
+
 
     <div class="row">
         <div class="col-3" th:each="recipe:${recipes}">
@@ -20,6 +33,7 @@
 
         </div>
     </div>
+
 </div>
 <div th:replace="fragments :: footer"></div>
 </body>

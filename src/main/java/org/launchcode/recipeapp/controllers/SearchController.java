@@ -3,14 +3,14 @@ package org.launchcode.recipeapp.controllers;
 
 import org.launchcode.recipeapp.models.Category;
 import org.launchcode.recipeapp.models.Recipe;
+import org.launchcode.recipeapp.models.SortParameter;
 import org.launchcode.recipeapp.models.data.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("search")
@@ -19,15 +19,19 @@ public class SearchController {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    List<Recipe> foundRecipes = new ArrayList<>();
+
     @GetMapping("")
     public String renderSearch(Model model) {
         model.addAttribute("categories", Category.values());
+        model.addAttribute("sort", SortParameter.values());
+
         return "search";
     }
 
 
-    @PostMapping(value="/results")
-    public String searchByKeyword(Model model, @RequestParam String keyword) {
+    @PostMapping(value = "/results")
+    public String searchRecipeByKeyword(Model model, @RequestParam String keyword) {
         String lower_val = keyword.toLowerCase();
 
         List<Recipe> recipeList = new ArrayList<>();
@@ -44,28 +48,59 @@ public class SearchController {
             } else if (recipe.getCategory().toString().toLowerCase().contains(lower_val)) {
                 foundRecipes.add(recipe);
 
+
             }
         }
         model.addAttribute("recipes", foundRecipes);
         model.addAttribute("categories", Category.values());
+        model.addAttribute("sort", SortParameter.values());
         return "search";
     }
 
-    @PostMapping(value= "/selectedCategory")
-    public String getRecipeByCategory(@RequestParam Category category, Model model){
+
+    @PostMapping(value = "/selectedCategory")
+    public String searchRecipeByCategory(@RequestParam Category category, Model model) {
         Iterable<Recipe> recipes = recipeRepository.findAll();
-        List<Recipe> recipeByCategory = new ArrayList<>();
-        for (Recipe recipe:recipes) {
-        if(recipe.getCategory().name().toLowerCase().equals(category.name().toLowerCase())){
-            recipeByCategory.add(recipe);
-        }
-        model.addAttribute("recipes", recipeByCategory);
-        model.addAttribute("categories", Category.values());
 
-    }
+        if (category == null) {
+            List<Recipe> allRecipe = new ArrayList<>();
+            for (Recipe recipe : recipes) {
+                allRecipe.add(recipe);
+                model.addAttribute("recipes", allRecipe);
+                model.addAttribute("categories", Category.values());
+                model.addAttribute("sort", SortParameter.values());
+            }
+        } else {
+            List<Recipe> recipeByCategory = new ArrayList<>();
+            for (Recipe recipe : recipes) {
+                if (recipe.getCategory().name().toLowerCase().equals(category.name().toLowerCase())) {
+                    recipeByCategory.add(recipe);
+                }
+            }
+            model.addAttribute("recipes", recipeByCategory);
+            model.addAttribute("categories", Category.values());
+            model.addAttribute("sort", SortParameter.values());
+
+        }
         return "search";
     }
 
+    @PostMapping(value = "/sortSearchResults")
+    public String sortKeywordSearchResults(@RequestParam SortParameter sortParameter, Model model) {
+        List<Recipe> recipes = foundRecipes;
+        List<Recipe> sortedRecipes = new ArrayList<>();
 
+        if (sortParameter.equals(SortParameter.NAME_ASCENDING)) {
+            for(Recipe recipe : recipes ) {
+                sortedRecipes.add(recipe);
+                Collections.sort(sortedRecipes, new Recipe.SortByName());
+            }
 
-}
+        }
+                model.addAttribute("recipes", sortedRecipes);
+                model.addAttribute("categories", Category.values());
+                model.addAttribute("sort", SortParameter.values());
+                 return "search";
+            }
+
+        }

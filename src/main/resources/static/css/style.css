@@ -236,6 +236,35 @@ th {
     width: 300px !important;
 }
 
+.dropbtn {
+  color: Black;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.dropdown {
+  position: fixed;
+  top: 200px;
+  left: 1030px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 100px;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  display: block;
+}
+
+
+
+
+
 
 
 
