@@ -37,10 +37,11 @@
                     <option th:each="tag : ${tags}" th:value="${tag}" th:text="${tag.name()}"></option>
                 </select>
             </div><br/>
-            <div class="form-group">
+            <div class="form-group" id="ingredientsContainer">
                 <label>Ingredients:</label>
-                <input type="text" th:field="*{ingredients}"></input><br/><button>Add Ingredient</button>
-            </div><br>
+                <input type="text" name="ingredient"></input><br/>
+            </div>
+            <button id="addIngredientButton">Add Ingredient</button><br>
             <div class="form-group">
                 <label>Directions:</label>
                 <input type="text" th:field="*{instructions}"></input>

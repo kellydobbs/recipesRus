@@ -13,8 +13,8 @@ public class Ingredient extends AbstractEntity{
 
     private String ingredient;
 
-    public Ingredient(double measurement) {
-        this.measurement = measurement;
+    public Ingredient(String ingredient) {
+        this.ingredient = ingredient;
     }
 
     public double getMeasurement() {

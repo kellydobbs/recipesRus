@@ -1,5 +1,6 @@
 package org.launchcode.recipeapp.controllers;
 
+import org.launchcode.recipeapp.models.Ingredient;
 import org.launchcode.recipeapp.models.data.RecipeRepository;
 import org.launchcode.recipeapp.models.Category;
 import org.launchcode.recipeapp.models.Recipe;
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -55,7 +59,7 @@ public class RecipeController {
    }
 
    @PostMapping("create")
-   public String createRecipe(@ModelAttribute @Valid Recipe newRecipe,
+   public String createRecipe(HttpServletRequest request, @ModelAttribute Recipe newRecipe,
                               @ModelAttribute @Valid String newCategory,
                               Errors errors, Model model, RedirectAttributes redirectAttrs) {
 
@@ -64,6 +68,15 @@ public class RecipeController {
          return "recipes/create";
       }
 
+      String[] ingredients = request.getParameterValues("ingredient");
+
+      List<Ingredient> ingredientsList = new ArrayList<Ingredient>();
+
+      for (int i = 0; i < ingredients.length; i++) {
+         Ingredient newIngredient = new Ingredient(ingredients[i]);
+         ingredientsList.add(newIngredient);
+      }
+      newRecipe.setIngredients(ingredientsList);
       Recipe recipe = recipeRepository.save(newRecipe);
       redirectAttrs.addAttribute("recipeId", recipe.getId());
 
