@@ -30,12 +30,12 @@
     </nav>
 
     <div class="search">
-        <form class="d-flex" action="/search/results" method="post">
+        <form class="d-flex" action="/search/keywordResults" method="post">
             <input class="form-control mr-2" type="text" name="keyword" placeholder="Search by Keyword" aria-label="Search">
             <button class="btn btn-light" type="submit">Search</button>
         </form>
 
-        <form class="d-flex" action="/search/selectedCategory" method="post" th:object="${recipe}">
+        <form class="d-flex" action="/search/categoryResults" method="post" th:object="${recipe}">
                      <select class="form-control selectpicker" name="category" >
                         <option value="">All Categories</option>
                         <option th:each="category:${categories}"
