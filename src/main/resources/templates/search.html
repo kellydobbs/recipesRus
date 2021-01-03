@@ -9,16 +9,18 @@
 
 <h1 class="title-recipes" th:text="'Found Recipes'"></h1>
 
-    <form class="dropdown" action="/search" method="post" th:object="${recipe}">
-        <select class="dropbtn" name="sort">
-        <option class = "dropdown-content">Sort By: </option>
-        <option th:each="sortValue:${sort}"
-                th:value="${sortValue}"
-                th:text="${sortValue}">
-        </option>
-        </select>
 
-    </form>
+        <form class="d-flex" action="/search/sortKeyword" method="post" >
+            <select class="form-control selectpicker" name="sortParameter" >
+                <option value="">Sort by..</option>
+                <option th:each="sortValue:${sort}"
+                        th:value="${sortValue}"
+                        th:text="${sortValue}">
+                </option>
+            </select>
+            <button class="btn btn-light" type="submit">Sort</button>
+        </form>
+
 
 
     <div class="row">

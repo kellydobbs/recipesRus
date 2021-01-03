@@ -38,10 +38,19 @@ public class Recipe extends AbstractEntity {
    }
 
    //// Used for sorting in ascending order of name
-   public static class SortByName implements Comparator<Recipe> {
+   public static class SortByNameAsc implements Comparator<Recipe> {
       public int compare(Recipe a, Recipe b)
       {
          return a.name.compareTo(b.name);
+      }
+
+   }
+
+   //// Used for sorting in descending order of name
+   public static class SortByNameDesc implements Comparator<Recipe> {
+      public int compare(Recipe a, Recipe b)
+      {
+         return b.name.compareTo(a.name);
       }
 
    }
