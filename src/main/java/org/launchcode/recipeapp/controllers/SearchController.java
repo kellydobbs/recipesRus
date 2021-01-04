@@ -29,7 +29,7 @@ public class SearchController {
         return "search";
     }
 
-
+    // Search by keyword
     @PostMapping(value = "/keywordResults")
     public String searchRecipeByKeyword(Model model, @RequestParam String keyword) {
         foundRecipes.clear();
@@ -48,6 +48,8 @@ public class SearchController {
                 foundRecipes.add(recipe);
             } else if (recipe.getCategory().toString().toLowerCase().contains(lower_val)) {
                 foundRecipes.add(recipe);
+            }else if (recipe.getTag().toString().toLowerCase().contains(lower_val)) {
+                foundRecipes.add(recipe);
             }
         }
         model.addAttribute("recipes", foundRecipes);
@@ -57,6 +59,7 @@ public class SearchController {
     }
 
 
+    //filter by category
     @PostMapping(value = "/categoryResults")
     public String searchRecipeByCategory(@RequestParam Category category, Model model) {
         foundRecipes.clear();
@@ -83,10 +86,13 @@ public class SearchController {
         return "search";
     }
 
+
+    //sort search results
     @PostMapping(value = "/sort")
     public String sortKeywordSearchResults(@RequestParam SortParameter sortParameter, Model model) {
         Iterable<Recipe> recipes = foundRecipes;
 
+        // sort is black
         if (sortParameter == null) {
             List<Recipe> unsortedRecipe = new ArrayList<>();
             for (Recipe recipe : recipes) {
@@ -96,7 +102,8 @@ public class SearchController {
                 model.addAttribute("sort", SortParameter.values());
             }
 
-        } else if ((sortParameter.getName().equals("Ascending Recipe Name"))) {
+        //sort is ascending name
+        } else if ((sortParameter.getName().equals("Recipe Name: A-Z"))) {
             List<Recipe> sortedRecipes = new ArrayList<>();
             for (Recipe recipe : recipes) {
                 sortedRecipes.add(recipe);
@@ -107,7 +114,8 @@ public class SearchController {
             model.addAttribute("categories", Category.values());
             model.addAttribute("sort", SortParameter.values());
 
-        } else if ((sortParameter.getName().equals("Descending Recipe Name"))) {
+        //sort is descending name
+        } else if ((sortParameter.getName().equals("Recipe Name: Z-A"))) {
             List<Recipe> sortedRecipes = new ArrayList<>();
             for (Recipe recipe : recipes) {
                 sortedRecipes.add(recipe);
@@ -118,8 +126,43 @@ public class SearchController {
             model.addAttribute("categories", Category.values());
             model.addAttribute("sort", SortParameter.values());
 
+        //sort is ascending averageRating
+        } else if ((sortParameter.getName().equals("Average Rating: High-Low"))) {
+            List<Recipe> sortedRecipes = new ArrayList<>();
+            for (Recipe recipe : recipes) {
+                sortedRecipes.add(recipe);
+                Collections.sort(sortedRecipes, new Recipe.SortByRatingAsc());
+
+            }
+            model.addAttribute("recipes", sortedRecipes);
+            model.addAttribute("categories", Category.values());
+            model.addAttribute("sort", SortParameter.values());
+
+        //sort is descending averageRating
+        } else if ((sortParameter.getName().equals("Average Rating: Low-High"))) {
+            List<Recipe> sortedRecipes = new ArrayList<>();
+            for (Recipe recipe : recipes) {
+                sortedRecipes.add(recipe);
+                Collections.sort(sortedRecipes, new Recipe.SortByRatingDsc());
+
+            }
+            model.addAttribute("recipes", sortedRecipes);
+            model.addAttribute("categories", Category.values());
+            model.addAttribute("sort", SortParameter.values());
+
         }
         return "search";
     }
+
+
+//    // filter search results
+//    @PostMapping(value = "/filter")
+//    public String filterSearchResults(@RequestParam filterParam filterParam, Model model) {
+//        Iterable<Recipe> recipes = foundRecipes;
+//        return "search";
+//    }
+
+
+
 
 }

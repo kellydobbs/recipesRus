@@ -10,15 +10,17 @@
 <h1 class="title-recipes" th:text="'Found Recipes'"></h1>
 
 
-        <form class="d-flex" action="/search/sort" method="post" >
-            <select class="form-control selectpicker" name="sortParameter" >
+
+        <form action="/search/sort" method="post" th:object="${recipe}">
+            <div class="sort">
+            <select class="btn btn-light" name="sortParameter" onchange="this.form.submit()">
                 <option value="">Sort by..</option>
                 <option th:each="sortValue:${sort}"
                         th:value="${sortValue}"
                         th:text="${sortValue.getName()}">
                 </option>
             </select>
-            <button class="btn btn-light" type="submit">Sort</button>
+            </div>
         </form>
 
 

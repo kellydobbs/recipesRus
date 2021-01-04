@@ -1,12 +1,12 @@
 package org.launchcode.recipeapp.models;
 
 public enum SortParameter {
-    NAME_ASCENDING ("Ascending Recipe Name"),
-    NAME_DESCENDING ("Descending Recipe Name"),
-    TIME_ASCENDING ("Ascending Total Time"),
-    TIME_DESCENDING ("Descending Total Time"),
-    RATING_ASCENDING ("Rating: Highest - Lowest"),
-    RATING_DESCENDING ("Rating: Lowest - Highest");
+    NAME_ASCENDING ("Recipe Name: A-Z"),
+    NAME_DESCENDING ("Recipe Name: Z-A"),
+    RATING_ASCENDING ("Average Rating: High-Low"),
+    RATING_DESCENDING ("Average Rating: Low-High"),
+    TIME_ASCENDING ("Total Time: High-Low"),
+    TIME_DESCENDING ("Total Time: Low-High");
 
 
      private String name;

@@ -266,11 +266,15 @@ th {
 }
 
 
-
-
-
 .error {
   color: red;
+}
+
+.sort {
+   background color: blue;
+   position: fixed;
+   right: 10px;
+   top: 30px;
 }
 
 
