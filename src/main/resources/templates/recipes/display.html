@@ -51,6 +51,10 @@
         <td class="col-sm-9" th:text="${recipe.category}"></td>
 
     </tr>
+
+    <tr th:each="ingredient : ${recipe.ingredients}">
+        <td th:text="${ingredient.ingredient}"></td>
+    </tr>
     <tr class="row">
         <th class="col-sm-3">Tags:</th>
         <td class="col-sm-9" th:text="${recipe.tag}"></td>

@@ -42,10 +42,11 @@
                 <input type="text" name="ingredient"></input><br/>
             </div>
             <button id="addIngredientButton">Add Ingredient</button><br>
-            <div class="form-group">
+            <div class="form-group" id="instructionsContainer">
                 <label>Directions:</label>
-                <input type="text" th:field="*{instructions}"></input>
+                <input type="text" name="instruction"></input>
             </div>
+            <button id="addInstructionButton">Add Instruction</button><br>
 
             <button  type="submit" class="btn btn-primary" onclick="submitForm()">Create</button>
 
