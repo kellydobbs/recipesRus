@@ -1,6 +1,8 @@
 package org.launchcode.recipeapp.models;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -17,6 +19,10 @@ public class Ingredient extends AbstractEntity{
         this.ingredient = ingredient;
     }
 
+    public Ingredient() {
+
+    }
+
     public double getMeasurement() {
         return measurement;
     }
@@ -31,5 +37,13 @@ public class Ingredient extends AbstractEntity{
 
     public void setIngredient(String ingredient) {
         this.ingredient = ingredient;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

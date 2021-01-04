@@ -1,10 +1,10 @@
 package org.launchcode.recipeapp.controllers;
 
-import org.launchcode.recipeapp.models.Ingredient;
+import org.apache.catalina.Store;
+import org.launchcode.recipeapp.models.*;
+import org.launchcode.recipeapp.models.data.IngredientRepository;
+import org.launchcode.recipeapp.models.data.InstructionRepository;
 import org.launchcode.recipeapp.models.data.RecipeRepository;
-import org.launchcode.recipeapp.models.Category;
-import org.launchcode.recipeapp.models.Recipe;
-import org.launchcode.recipeapp.models.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,11 +30,16 @@ import java.util.Optional;
 @RequestMapping("recipes")
 public class RecipeController {
 
-   private final RecipeRepository recipeRepository;
+   private final org.launchcode.recipeapp.models.data.RecipeRepository recipeRepository;
+   private final IngredientRepository ingredientRepository;
+   private final InstructionRepository instructionRepository;
+
 
    @Autowired
-   public RecipeController(RecipeRepository recipeRepository) {
+   public RecipeController(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, InstructionRepository instructionRepository) {
       this.recipeRepository = recipeRepository;
+      this.ingredientRepository = ingredientRepository;
+      this.instructionRepository = instructionRepository;
    }
 
    @GetMapping
@@ -69,15 +74,25 @@ public class RecipeController {
       }
 
       String[] ingredients = request.getParameterValues("ingredient");
+      String[] instructions = request.getParameterValues("instruction");
 
       List<Ingredient> ingredientsList = new ArrayList<Ingredient>();
+      List<Instruction> instructionsList = new ArrayList<Instruction>();
+
+      Recipe recipe = recipeRepository.save(newRecipe);
 
       for (int i = 0; i < ingredients.length; i++) {
          Ingredient newIngredient = new Ingredient(ingredients[i]);
+         newIngredient.setRecipe(recipe);
          ingredientsList.add(newIngredient);
+         ingredientRepository.save(newIngredient);
       }
-      newRecipe.setIngredients(ingredientsList);
-      Recipe recipe = recipeRepository.save(newRecipe);
+      for (int i = 0; i < instructions.length; i++) {
+         Instruction newInstruction = new Instruction(instructions[i]);
+         newInstruction.setRecipe(recipe);
+         instructionsList.add(newInstruction);
+         instructionRepository.save(newInstruction);
+      }
       redirectAttrs.addAttribute("recipeId", recipe.getId());
 
       return "redirect:/recipes/display";
@@ -133,7 +148,7 @@ public class RecipeController {
       if (recipeOpt.isPresent()) {
          Recipe recipe = recipeOpt.get();
          recipe.setCategory(newRecipe.getCategory());
-         recipe.setDirections(newRecipe.getDirections());
+         recipe.setInstructions(newRecipe.getInstructions());
          recipe.setImg(newRecipe.getImg());
          recipe.setIngredients(newRecipe.getIngredients());
          recipe.setName(newRecipe.getName());

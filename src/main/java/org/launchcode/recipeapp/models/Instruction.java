@@ -15,11 +15,23 @@ public class Instruction extends AbstractEntity{
         this.step = step;
     }
 
+    public Instruction() {
+
+    }
+
     public String getStep() {
         return step;
     }
 
     public void setStep(String step) {
         this.step = step;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

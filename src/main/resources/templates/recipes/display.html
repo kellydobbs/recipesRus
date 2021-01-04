@@ -40,9 +40,9 @@
         <td class="col-sm-9"th:text="${recipe.ingredients}"></td>
 
     </tr>
-    <tr class="row">
+    <tr class="row" th:each="instruction: ${recipe.instructions}">
         <th class="col-sm-3">Directions:</th>
-        <td class="col-sm-9" th:text="${recipe.instructions}"></td>
+        <td class="col-sm-9" th:text="${instruction.step}"></td>
 
     </tr>
 
@@ -70,8 +70,8 @@
     </td>
     </tr>
 </table>
-
 </div>
+
 <div th:replace="fragments :: footer"></div>
 </body>
 </html>

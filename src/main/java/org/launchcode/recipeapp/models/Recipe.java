@@ -16,13 +16,10 @@ public class Recipe extends AbstractEntity {
 
    private String name;
 
-   @OneToMany(mappedBy = "recipe")
-   @NotNull(message = "Ingredients required")
+   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
    private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 
-   private String directions;
-
-   @OneToMany(mappedBy = "recipe")
+   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
    private List<Instruction> instructions = new ArrayList<Instruction>();
 
    @NotNull(message = "Category required")
@@ -81,13 +78,6 @@ public class Recipe extends AbstractEntity {
       this.ingredients = ingredients;
    }
 
-   public String getDirections() {
-      return directions;
-   }
-
-   public void setDirections(String directions) {
-      this.directions = directions;
-   }
 
    public Tag getTag() {
       return tag;
