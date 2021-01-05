@@ -1,6 +1,7 @@
 package org.launchcode.recipeapp.controllers;
 
 
+import org.launchcode.recipeapp.models.Category;
 import org.launchcode.recipeapp.models.Recipe;
 import org.launchcode.recipeapp.models.data.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class HomeController {
    @GetMapping("/home")
    public String home(Model model) {
       Iterable<Recipe> all = recipeRepository.findAll();
+      model.addAttribute("categories", Category.values());
       model.addAttribute("recipes", all);
       model.addAttribute("title", "Saint Louis Best Recipes");
 

@@ -1,6 +1,7 @@
 package org.launchcode.recipeapp.controllers;
 
 import org.launchcode.recipeapp.models.Recipe;
+import org.launchcode.recipeapp.models.SortParameter;
 import org.launchcode.recipeapp.models.User;
 import org.launchcode.recipeapp.models.UserRecipe;
 import org.launchcode.recipeapp.models.data.RecipeRepository;
@@ -64,7 +65,7 @@ public class UserController {
             Recipe recipe = userRecipe.getRecipe();
             recipes.add(recipe);
          }
-
+         model.addAttribute("sort", SortParameter.values());
          model.addAttribute("title", sessionUser.getUsername());
          model.addAttribute("user", sessionUser);
          model.addAttribute("recipes", recipes);

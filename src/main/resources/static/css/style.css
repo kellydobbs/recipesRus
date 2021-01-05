@@ -274,9 +274,12 @@ th {
    background color: blue;
    position: fixed;
    right: 10px;
-   top: 30px;
+   top: 120px;
 }
 
+ul {
+    list-style: outside none none;
+}
 
 
 

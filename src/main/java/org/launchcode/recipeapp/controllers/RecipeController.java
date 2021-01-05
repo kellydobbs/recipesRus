@@ -1,10 +1,7 @@
 package org.launchcode.recipeapp.controllers;
 
-import org.launchcode.recipeapp.models.Review;
+import org.launchcode.recipeapp.models.*;
 import org.launchcode.recipeapp.models.data.RecipeRepository;
-import org.launchcode.recipeapp.models.Category;
-import org.launchcode.recipeapp.models.Recipe;
-import org.launchcode.recipeapp.models.Tag;
 import org.launchcode.recipeapp.models.data.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,6 +75,7 @@ public class RecipeController {
    @GetMapping("display")
    public String displayRecipe(@RequestParam Integer recipeId, Model model) {
       model.addAttribute("review", new Review());
+      model.addAttribute("categories", Category.values());
       Optional<Recipe> result = recipeRepository.findById(recipeId);
 
       if (result.isEmpty()) { // invalid id
@@ -163,6 +161,7 @@ public class RecipeController {
       List<Recipe> all = ((List<Recipe>) recipeRepository.findAll());
 
       model.addAttribute("recipes", all);
+      model.addAttribute("categories", Category.values());
 
       return "recipes/all";
 

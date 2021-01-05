@@ -16,9 +16,55 @@
 <body>
 
 <header th:fragment="header">
-    <div id="logo-img">
-        <h1>Recipes R Us</h1>
-    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #0a67f2; color: #f2f2f2">
+        <div class="container-fluid">
+            <div class="" id="logo-img">
+                <h1 style="color: #f2f2f2">Recipes R Us</h1>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="left-header-btn">
+
+                    <div id="login" class="left-space-header">
+                        <span th:if="${session.isEmpty()}"><a class="btn btn-light" th:href="@{/login}">Login</a></span>
+                    </div>
+                    <div id="register" class="left-space-header">
+                        <span th:if="${session.isEmpty()}"><a class="btn btn-light" th:href="@{/register}">Register</a></span>
+                    </div>
+
+                    <form action="/search/categoryResults" method="post" th:object="${recipe}">
+                        <div class="left-space-header">
+                        <select class="btn btn-light" name="category" onchange="this.form.submit()">
+                            <option value="">All Categories</option>
+                            <option th:each="category:${categories}"
+                                    th:value="${category}"
+                                    th:text="${category.getName()}">
+                            </option>
+                        </select>
+                    </div>
+                    </form>
+
+                    <div class=class="left-space-header">
+                        <form class="d-flex" action="/search/keywordResults" method="post">
+                            <input class="form-control mr-2" type="text" name="keyword" placeholder="Search by Keyword" aria-label="Search">
+                            <button class="btn btn-light" type="submit">Search</button>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="right-header-btn">
+                    <div id="home" style="margin-right: 10px">
+                        <span th:if="${session.user}"><a class="btn btn-light" th:href="@{/home}">Home</a></span>
+                    </div>
+                    <div>
+                        <span th:if="${session.user}"><a class="btn btn-light" th:href="@{/logout}">Logout</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <nav>
         <ul class="menu">
             <li class="menu-item"><a href="/categories/1">Category 1</a></li>
@@ -29,24 +75,7 @@
         </ul>
     </nav>
 
-    <div class="search">
-        <form class="d-flex" action="/search/keywordResults" method="post">
-            <input class="form-control mr-2" type="text" name="keyword" placeholder="Search by Keyword" aria-label="Search">
-            <button class="btn btn-light" type="submit">Search</button>
-        </form>
 
-        <form class="d-flex" action="/search/categoryResults" method="post" th:object="${recipe}">
-            <select class="form-control selectpicker" name="category" >
-                <option value="">All Categories</option>
-                <option th:each="category:${categories}"
-                        th:value="${category}"
-                        th:text="${category.getName()}">
-
-                </option>
-            </select>
-            <button class="btn btn-light" type="submit">Search</button>
-        </form>
-    </div>
 </header>
 
 

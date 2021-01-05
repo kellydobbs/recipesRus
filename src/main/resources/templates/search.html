@@ -23,26 +23,26 @@
             </div>
         </form>
 
-        <form>
+        <form action="/search/filter" method="post" th:object="${recipe}">
             <ul>
-                <li th:each="filter : ${tag}">
-                    <input type="checkbox" name="tag" th:value="${filter}"/>
-                    <label th:text="${filter.getname}"></label>
+            <label th:for="filterTypes"> Filter by:</label>
+                <li th:each="filterType : ${filterTypes}">
+                    <input th:value="${filterType}" type="checkbox" name="tag">
+                    <label th:text="${filterType.getName()}"></label>
                 </li>
-            </ul>
+                    <button class="btn btn-light" type="submit">Filter</button>
+                </ul>
         </form>
 
 
     <div class="row">
         <div class="col-3" th:each="recipe:${recipes}">
-
             <div style="background-color: #fefacd">
                 <img class="img-med" th:src="${recipe.img}"/>
             </div>
             <table class="table">
                 <a style="margin:center" th:text="${recipe.name}" th:href="'/recipes/display?recipeId=' + ${recipe.id}"></a>
             </table>
-
         </div>
     </div>
 
