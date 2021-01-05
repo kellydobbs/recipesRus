@@ -23,6 +23,14 @@
             </div>
         </form>
 
+        <form>
+            <ul>
+                <li th:each="filter : ${tag}">
+                    <input type="checkbox" name="tag" th:value="${filter}"/>
+                    <label th:text="${filter.getname}"></label>
+                </li>
+            </ul>
+        </form>
 
 
     <div class="row">

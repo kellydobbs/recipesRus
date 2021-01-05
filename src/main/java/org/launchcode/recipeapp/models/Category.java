@@ -1,8 +1,5 @@
 package org.launchcode.recipeapp.models;
 
-/**
- * @author Oksana
- */
 public enum Category {
 
   BEVERAGES ("Beverage"),

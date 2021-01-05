@@ -4,6 +4,7 @@ package org.launchcode.recipeapp.controllers;
 import org.launchcode.recipeapp.models.Category;
 import org.launchcode.recipeapp.models.Recipe;
 import org.launchcode.recipeapp.models.SortParameter;
+import org.launchcode.recipeapp.models.Tag;
 import org.launchcode.recipeapp.models.data.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,10 +22,17 @@ public class SearchController {
 
     List<Recipe> foundRecipes = new ArrayList<>();
 
+//
+//    @ModelAttribute
+//    public void initValues(Model model) {
+//        model.addAttribute("filterTypes", Arrays.asList("Chicken", "Fish"));
+//    }
+
     @GetMapping("")
     public String renderSearch(Model model) {
         model.addAttribute("categories", Category.values());
         model.addAttribute("sort", SortParameter.values());
+        model.addAttribute("filterTypes", Tag.values());
 
         return "search";
     }
@@ -89,7 +97,7 @@ public class SearchController {
 
     //sort search results
     @PostMapping(value = "/sort")
-    public String sortKeywordSearchResults(@RequestParam SortParameter sortParameter, Model model) {
+    public String sortSearchResults(@RequestParam SortParameter sortParameter, Model model) {
         Iterable<Recipe> recipes = foundRecipes;
 
         // sort is black
@@ -155,12 +163,14 @@ public class SearchController {
     }
 
 
-//    // filter search results
-//    @PostMapping(value = "/filter")
-//    public String filterSearchResults(@RequestParam filterParam filterParam, Model model) {
-//        Iterable<Recipe> recipes = foundRecipes;
-//        return "search";
-//    }
+    // filter search results
+    @RequestMapping(value = "/filter")
+    public String filterSearchResults(@RequestParam Tag tag, Model model) {
+        model.addAttribute("filterTypes", Tag.values());
+
+        Iterable<Recipe> recipes = foundRecipes;
+        return "search";
+    }
 
 
 
