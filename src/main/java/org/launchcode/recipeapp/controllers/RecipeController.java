@@ -138,21 +138,51 @@ public class RecipeController {
    }
 
    @PostMapping("edit")
-   public String processEditForm(Integer recipeId, @ModelAttribute @Valid Recipe newRecipe,
+   public String processEditForm(HttpServletRequest request, Integer recipeId, @ModelAttribute Recipe newRecipe,
                                  Errors errors, Model model, RedirectAttributes redirectAttrs) {
       if (errors.hasErrors()) {
          model.addAttribute("title", "Edit Recipe");
          return "recipes/edit";
       }
+
+      String[] ingredients = request.getParameterValues("ingredient");
+      String[] instructions = request.getParameterValues("instruction");
+
+      List<Ingredient> ingredientsList = new ArrayList<Ingredient>();
+      List<Instruction> instructionsList = new ArrayList<Instruction>();
+
+
       Optional<Recipe> recipeOpt = recipeRepository.findById(recipeId);
       if (recipeOpt.isPresent()) {
          Recipe recipe = recipeOpt.get();
+
+         List<Ingredient> ingredientsToDelete = ingredientRepository.findByRecipeId(recipe.getId());
+         for (int i = 0; i < ingredientsToDelete.size(); i++) {
+            ingredientRepository.delete(ingredientsToDelete.get(i));
+         }
+         List<Instruction> instructionsToDelete = instructionRepository.findByRecipeId(recipe.getId());
+         for (int i = 0; i < instructionsToDelete.size(); i++) {
+            instructionRepository.delete(instructionsToDelete.get(i));
+         }
+
          recipe.setCategory(newRecipe.getCategory());
-         recipe.setInstructions(newRecipe.getInstructions());
          recipe.setImg(newRecipe.getImg());
-         recipe.setIngredients(newRecipe.getIngredients());
          recipe.setName(newRecipe.getName());
          recipe.setTag(newRecipe.getTag());
+
+         for (int i = 0; i < ingredients.length; i++) {
+            Ingredient newIngredient = new Ingredient(ingredients[i]);
+            newIngredient.setRecipe(recipe);
+            ingredientsList.add(newIngredient);
+            ingredientRepository.save(newIngredient);
+         }
+
+         for (int i = 0; i < instructions.length; i++) {
+            Instruction newInstruction = new Instruction(instructions[i]);
+            newInstruction.setRecipe(recipe);
+            instructionsList.add(newInstruction);
+            instructionRepository.save(newInstruction);
+         }
 
 
          Recipe savedRecipe = recipeRepository.save(recipe);
