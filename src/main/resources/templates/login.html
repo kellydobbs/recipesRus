@@ -3,12 +3,10 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <div th:replace="fragments :: header"></div>
-<div class="container">
-<br>
-<div>
-<form method="post" style="max-width:600px;">
+<div class="border border-dark rounded p-3 m-5 w-25 mx-auto">
+<form method="post">
     <div class="form-group">
-        <br>
+        <h3>Login</h3>
         <label th:for="username">Username
             <input class="form-control" th:field="${loginFormDTO.username}">
         </label>
@@ -24,7 +22,7 @@
     <input type="submit" class="btn btn-primary" value="Log In" />
 </form>
 
-<p>Don't have an account? <a href="/register">Register for one.</a></p>
+<p class="my-2">Don't have an account? <a href="/register">Register for one.</a></p>
 </div>
 </div>
 <div th:replace="fragments :: footer"></div>

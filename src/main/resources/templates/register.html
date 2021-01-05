@@ -4,7 +4,9 @@
 <body>
 <div th:replace="fragments :: header"></div>
 <br>
-<form method="post" style="max-width:600px;">
+<div class="border border-dark rounded p-3 m-5 w-25 mx-auto">
+<form method="post">
+    <h3>Register</h3>
     <div class="form-group">
         <br>
         <label>Username
@@ -26,6 +28,7 @@
 
     <input type="submit" class="btn btn-primary" value="Register" />
 </form>
+</div>
 <div th:replace="fragments :: footer"></div>
 </body>
 </html>
