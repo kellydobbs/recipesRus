@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 public class Recipe extends AbstractEntity {
@@ -43,7 +44,7 @@ public class Recipe extends AbstractEntity {
    //// Used for sorting in ascending order of name
    public static class SortByNameAsc implements Comparator<Recipe> {
       public int compare(Recipe a, Recipe b) {
-         return a.name.compareTo(b.name);
+         return a.name.toLowerCase().compareTo(b.name.toLowerCase());
       }
 
    }
@@ -51,7 +52,7 @@ public class Recipe extends AbstractEntity {
    //// Used for sorting in descending order of name
    public static class SortByNameDesc implements Comparator<Recipe> {
       public int compare(Recipe a, Recipe b) {
-         return b.name.compareTo(a.name);
+         return b.name.toLowerCase().compareTo(a.name.toLowerCase());
       }
 
    }
