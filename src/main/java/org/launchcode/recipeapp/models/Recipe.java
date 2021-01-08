@@ -38,6 +38,8 @@ public class Recipe extends AbstractEntity {
    private List<UserRecipe> users = new ArrayList<>();
 
 
+
+
    //// Used for sorting in ascending order of name
    public static class SortByNameAsc implements Comparator<Recipe> {
       public int compare(Recipe a, Recipe b) {

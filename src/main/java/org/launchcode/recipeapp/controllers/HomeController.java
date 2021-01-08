@@ -25,9 +25,10 @@ public class HomeController {
    @GetMapping("/home")
    public String home(Model model) {
       Iterable<Recipe> all = recipeRepository.findAll();
-      model.addAttribute("categories", Category.values());
-      model.addAttribute("recipes", all);
+
       model.addAttribute("title", "Saint Louis Best Recipes");
+      model.addAttribute("recipes", all);
+      model.addAttribute("categories", Category.values());
 
       return "index";
    }
