@@ -1,6 +1,7 @@
 package org.launchcode.recipeapp.controllers;
 
 import org.launchcode.recipeapp.models.Recipe;
+import org.launchcode.recipeapp.models.Review;
 import org.launchcode.recipeapp.models.User;
 import org.launchcode.recipeapp.models.UserRecipe;
 import org.launchcode.recipeapp.models.data.RecipeRepository;
