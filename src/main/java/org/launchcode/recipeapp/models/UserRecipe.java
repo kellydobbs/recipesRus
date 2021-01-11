@@ -23,21 +23,29 @@ public class UserRecipe extends AbstractEntity {
 
    @ManyToOne(targetEntity = User.class,
            fetch = FetchType.LAZY,
-           cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+           cascade = {CascadeType.MERGE})
    @JoinColumn(name = "user_id",
            referencedColumnName = "id",
            foreignKey = @ForeignKey(name = "FK_USER"))
-   @NotNull(message = "")
+ //  @NotNull(message = "")
    private User user;
 
    @ManyToOne(targetEntity = Recipe.class,
            fetch = FetchType.LAZY,
-           cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+           cascade = {CascadeType.MERGE})
    @JoinColumn(name = "recipe_id",
            referencedColumnName = "id",
            foreignKey = @ForeignKey(name = "FK_USER_RECIPE"))
-   @NotNull(message = "")
+ //  @NotNull(message = "")
    private Recipe recipe;
+
+   public UserRecipe(User user, Recipe recipe) {
+      this.user = user;
+      this.recipe = recipe;
+   }
+
+   public UserRecipe() {
+   }
 
    public User getUser() {
       return user;
@@ -53,5 +61,13 @@ public class UserRecipe extends AbstractEntity {
 
    public void setRecipe(Recipe recipe) {
       this.recipe = recipe;
+   }
+
+   @Override
+   public String toString() {
+      return "UserRecipe{" +
+              "user=" + user +
+              ", recipe=" + recipe +
+              '}';
    }
 }

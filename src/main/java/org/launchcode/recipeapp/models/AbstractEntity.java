@@ -3,6 +3,7 @@ package org.launchcode.recipeapp.models;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
@@ -31,5 +32,6 @@ public abstract class AbstractEntity {
    public int hashCode() {
       return Objects.hash(getId());
    }
+
 
 }

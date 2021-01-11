@@ -1,11 +1,14 @@
 package org.launchcode.recipeapp.controllers;
 
-import org.launchcode.recipeapp.models.Review;
-import org.launchcode.recipeapp.models.data.RecipeRepository;
 import org.launchcode.recipeapp.models.Category;
 import org.launchcode.recipeapp.models.Recipe;
+import org.launchcode.recipeapp.models.Review;
 import org.launchcode.recipeapp.models.Tag;
+import org.launchcode.recipeapp.models.User;
+import org.launchcode.recipeapp.models.UserRecipe;
+import org.launchcode.recipeapp.models.data.RecipeRepository;
 import org.launchcode.recipeapp.models.data.ReviewRepository;
+import org.launchcode.recipeapp.models.data.UserRecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,9 +32,12 @@ public class RecipeController {
 
    private final RecipeRepository recipeRepository;
 
+   private final UserRecipeRepository userRecipeRepository;
+
    @Autowired
-   public RecipeController(RecipeRepository recipeRepository) {
+   public RecipeController(RecipeRepository recipeRepository, UserRecipeRepository userRecipeRepository) {
       this.recipeRepository = recipeRepository;
+      this.userRecipeRepository = userRecipeRepository;
    }
 
    @Autowired
@@ -76,16 +82,29 @@ public class RecipeController {
 
 
    @GetMapping("display")
-   public String displayRecipe(@RequestParam Integer recipeId, Model model) {
+   public String displayRecipe(@RequestParam Integer recipeId, Model model, HttpServletRequest request) {
       model.addAttribute("review", new Review());
       Optional<Recipe> result = recipeRepository.findById(recipeId);
 
       if (result.isEmpty()) { // invalid id
          model.addAttribute("title", "Invalid Recipe ID: " + recipeId);
       } else { // valid id
+
          Recipe recipe = result.get();
          model.addAttribute("title", recipe.getName());
          model.addAttribute("recipe", recipe);
+         User sessionUser = (User) request.getSession().getAttribute("user");
+
+         Optional<UserRecipe> recipeByUserOptional = userRecipeRepository.findByRecipeAndUser(recipe,sessionUser);
+
+         boolean isFavourite;
+         if (recipeByUserOptional.isPresent()) {
+            isFavourite = true;
+            model.addAttribute("title1", "This recipe has already been added to your profile ");
+         } else {
+            isFavourite = false;
+         }
+         model.addAttribute("isFavourite", isFavourite);
 
          Integer numComments = recipe.getNumComments();
          List<Review> reviews = recipe.getReviews();
@@ -129,7 +148,7 @@ public class RecipeController {
          } else if (numComments == 0 || numComments == null){ // no comments
             model.addAttribute("comments", "No comments yet");
          }
-         return "recipes/display";
+         return "redirect:/recipes/display?recipeId="+recipeId;
       }
 
       Review review = new Review(recipe, newReview.getRating(),newReview.getComment(), newReview.getName());
@@ -153,7 +172,7 @@ public class RecipeController {
          } else if (numComments == 0 || numComments == null){ // no comments
             model.addAttribute("comments", "No comments yet");
          }
-      return "recipes/display";
+      return "redirect:/recipes/display?recipeId="+recipeId;
    }
 
 

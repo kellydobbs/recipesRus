@@ -1,12 +1,23 @@
 package org.launchcode.recipeapp.models;
 
+import lombok.Data;
+import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@Data
+@ToString(exclude = "users")
+@DynamicInsert
+@DynamicUpdate
 @Entity
 public class Recipe extends AbstractEntity {
 
@@ -133,21 +144,25 @@ public class Recipe extends AbstractEntity {
    }
 
 
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Recipe)) return false;
+      if (!super.equals(o)) return false;
+      Recipe recipe = (Recipe) o;
+      return Objects.equals(getName(), recipe.getName()) && Objects.equals(getIngredients(), recipe.getIngredients()) && Objects.equals(getDirections(), recipe.getDirections()) && getCategory() == recipe.getCategory() && getTag() == recipe.getTag() && Objects.equals(getImg(), recipe.getImg()) && Objects.equals(getAverageRating(), recipe.getAverageRating()) && Objects.equals(getNumComments(), recipe.getNumComments()) && Objects.equals(getReviews(), recipe.getReviews()) && Objects.equals(getUsers(), recipe.getUsers());
+   }
 
    @Override
-   public String toString() {
-      return "Recipe{" +
-              "name='" + name + '\'' +
-              ", ingredients='" + ingredients + '\'' +
-              ", directions='" + directions + '\'' +
-              ", category=" + category +
-              ", tag=" + tag +
-              ", img='" + img + '\'' +
-              ", averageRating=" + averageRating +
-              ", reviews=" + reviews +
-              ", users=" + users +
-              '}';
+   public int hashCode() {
+      return Objects.hash(super.hashCode(), getName(), getIngredients(), getDirections(), getCategory(), getTag(), getImg(), getAverageRating(), getNumComments(), getReviews(), getUsers());
    }
 
 
+//   @PreRemove
+//   private void removeGroupsFromUsers() {
+//      for (UserRecipe u : users) {
+//         u.getGroups().remove(this);
+//      }
+//   }
 }

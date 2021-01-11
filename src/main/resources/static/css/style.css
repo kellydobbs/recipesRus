@@ -272,6 +272,9 @@ th {
 .error {
   color: red;
 }
-
+.delete_button {
+    background-color: darkred;
+    color: #e2e3e5;
+}
 
 
