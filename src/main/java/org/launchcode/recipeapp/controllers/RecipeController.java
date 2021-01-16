@@ -1,7 +1,14 @@
 package org.launchcode.recipeapp.controllers;
 
-import org.apache.catalina.Store;
-import org.launchcode.recipeapp.models.*;
+import org.launchcode.recipeapp.models.Category;
+import org.launchcode.recipeapp.models.Ingredient;
+import org.launchcode.recipeapp.models.Instruction;
+import org.launchcode.recipeapp.models.Measurement;
+import org.launchcode.recipeapp.models.Recipe;
+import org.launchcode.recipeapp.models.Review;
+import org.launchcode.recipeapp.models.Tag;
+import org.launchcode.recipeapp.models.User;
+import org.launchcode.recipeapp.models.UserRecipe;
 import org.launchcode.recipeapp.models.data.IngredientRepository;
 import org.launchcode.recipeapp.models.data.InstructionRepository;
 import org.launchcode.recipeapp.models.data.RecipeRepository;
@@ -35,23 +42,22 @@ public class RecipeController {
    private final org.launchcode.recipeapp.models.data.RecipeRepository recipeRepository;
    private final IngredientRepository ingredientRepository;
    private final InstructionRepository instructionRepository;
-
-
+   private final ReviewRepository reviewRepository;
    private final UserRecipeRepository userRecipeRepository;
 
    @Autowired
    public RecipeController(RecipeRepository recipeRepository,
                            IngredientRepository ingredientRepository,
                            InstructionRepository instructionRepository,
-                           UserRecipeRepository userRecipeRepository) {
+                           UserRecipeRepository userRecipeRepository,
+                           ReviewRepository reviewRepository) {
       this.recipeRepository = recipeRepository;
       this.userRecipeRepository = userRecipeRepository;
       this.ingredientRepository = ingredientRepository;
       this.instructionRepository = instructionRepository;
+      this.reviewRepository = reviewRepository;
    }
 
-   @Autowired
-   public ReviewRepository reviewRepository;
 
    @GetMapping
    public String getListOfRecipes(Model model) {
@@ -124,7 +130,6 @@ public class RecipeController {
          model.addAttribute("title", "Invalid Recipe ID: " + recipeId);
       } else {
          Recipe recipe = result.get();
-
          model.addAttribute("title", recipe.getName());
          model.addAttribute("recipe", recipe);
          User sessionUser = (User) request.getSession().getAttribute("user");
@@ -166,13 +171,13 @@ public class RecipeController {
    @PostMapping("display")
    public String processReviewForm(@ModelAttribute @Valid  Review newReview, Errors errors,
                                    @RequestParam Integer recipeId,
-                                   Model model) {
-      System.out.println(errors.hasErrors());
+                                   Model model, HttpServletRequest request) {
       Recipe recipe = recipeRepository.findById(recipeId).get();
 
       if (errors.hasErrors()) {
          model.addAttribute("title", recipe.getName());
          model.addAttribute("recipe", recipe);
+         return "recipes/display";
          model.addAttribute("averageRating", recipe.getAverageRating());
          model.addAttribute("numRatings", recipe.getReviews().size());
          Integer numComments = recipe.getNumComments();
@@ -185,18 +190,16 @@ public class RecipeController {
          return "redirect:/recipes/display?recipeId="+recipeId;
       }
 
-      Review review = new Review(recipe, newReview.getRating(),newReview.getComment(), newReview.getName());
-
-      review.setTimestamp();
+      // add review & update recipe calculations
+      User sessionUser = (User) request.getSession().getAttribute("user");
+      Review review = new Review(recipe, newReview.getRating(), newReview.getComment(), sessionUser, sessionUser.getUsername(), recipe.getCurrentTime());
       reviewRepository.save(review);
-      recipe.setAverageRating();
-      recipe.setNumComments(review);
+      review.updateCalculations(recipe,review);
       recipeRepository.save(recipe);
 
       model.addAttribute("title", recipe.getName());
       model.addAttribute("recipe", recipe);
       model.addAttribute("review", review);
-      model.addAttribute("averageRating", recipe.getAverageRating());
 
       model.addAttribute("numRatings", recipe.getReviews().size());
 

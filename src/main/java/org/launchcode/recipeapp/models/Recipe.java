@@ -10,6 +10,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Array;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +43,7 @@ public class Recipe extends AbstractEntity {
    private String img;
 
    private Double averageRating;
+   private Integer totalRatings = 0;
    private Integer numComments = 0;
 
    @OneToMany(mappedBy = "recipe")
@@ -71,4 +75,30 @@ public class Recipe extends AbstractEntity {
       }
       return numComments;
    }
+
+   public Integer getTotalRatings() {
+      if(totalRatings == null){
+         totalRatings = 0;
+      }
+      return totalRatings;
+   }
+
+   public void setTotalRatings(Review review) {
+     if (totalRatings == null){
+        totalRatings = 0;
+     }
+      if (!reviews.isEmpty()){
+         totalRatings ++;
+      }
+      this.totalRatings = totalRatings;
+   }
+
+   public String getCurrentTime(){
+      LocalDateTime timestampObj = LocalDateTime.now();
+      DateTimeFormatter dateObj = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+      DateTimeFormatter timeObj = DateTimeFormatter.ofPattern("h:mm a");
+      String dateTime = timestampObj.format(dateObj) + " at " + timestampObj.format(timeObj);
+      return dateTime;
+   }
+
 }
