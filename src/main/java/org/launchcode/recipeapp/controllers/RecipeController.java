@@ -144,25 +144,6 @@ public class RecipeController {
             isFavourite = false;
          }
          model.addAttribute("isFavourite", isFavourite);
-
-         Integer numComments = recipe.getNumComments();
-         List<Review> reviews = recipe.getReviews();
-
-         if (reviews.isEmpty()) { // no reviews
-            model.addAttribute("numRatings", "0");
-            model.addAttribute("averageRating", "No ratings");
-            model.addAttribute("comments", "No comments yet");
-         } else { // has reviews
-            model.addAttribute("averageRating", recipe.getAverageRating());
-            model.addAttribute("numRatings", recipe.getReviews().size());
-            model.addAttribute("reviews", reviews);
-
-            if(numComments != 0){ // has comments
-               model.addAttribute("comments", "Comments");
-            } else if (numComments == 0 || numComments == null){ // no comments
-               model.addAttribute("comments", "No comments yet");
-            }
-         }
       }
 
       return "recipes/display";
@@ -177,16 +158,7 @@ public class RecipeController {
       if (errors.hasErrors()) {
          model.addAttribute("title", recipe.getName());
          model.addAttribute("recipe", recipe);
-         return "recipes/display";
-         model.addAttribute("averageRating", recipe.getAverageRating());
-         model.addAttribute("numRatings", recipe.getReviews().size());
-         Integer numComments = recipe.getNumComments();
 
-         if(numComments != 0){ // has comments
-            model.addAttribute("comments", "Comments");
-         } else if (numComments == 0 || numComments == null){ // no comments
-            model.addAttribute("comments", "No comments yet");
-         }
          return "redirect:/recipes/display?recipeId="+recipeId;
       }
 
@@ -201,14 +173,6 @@ public class RecipeController {
       model.addAttribute("recipe", recipe);
       model.addAttribute("review", review);
 
-      model.addAttribute("numRatings", recipe.getReviews().size());
-
-      Integer numComments = recipe.getNumComments();
-      if (numComments != 0) { // has comments
-         model.addAttribute("comments", "Comments");
-      } else if (numComments == 0 || numComments == null) { // no comments
-         model.addAttribute("comments", "No comments yet");
-      }
       return "redirect:/recipes/display?recipeId="+recipeId;
    }
 
