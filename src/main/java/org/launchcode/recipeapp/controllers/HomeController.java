@@ -26,6 +26,7 @@ public class HomeController {
    public String home(Model model) {
       Iterable<Recipe> all = recipeRepository.findAll();
 
+      model.addAttribute("category", null);
       model.addAttribute("title", "Saint Louis Best Recipes");
       model.addAttribute("recipes", all);
       model.addAttribute("categories", Category.values());

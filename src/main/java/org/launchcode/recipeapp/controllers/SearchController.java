@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+
 
 @Controller
 @RequestMapping("search")
@@ -24,6 +27,8 @@ public class SearchController {
 
     //list of recipes from "SORT BY"
     List<Recipe> sortedRecipes = new ArrayList<>();
+
+
 
 
 
@@ -77,11 +82,16 @@ public class SearchController {
 
     //SEARCH BY CATEGORY
     @PostMapping(value = "/categoryResults")
-    public String searchRecipeByCategory(@RequestParam Category category, Model model) {
+    public String searchRecipeByCategory(@RequestParam Category category, HttpServletRequest request, Model model) {
+        String selectedValue = request.getParameter("selectedValue");
         foundRecipes.clear();
         filteredRecipes.clear();
         Iterable<Recipe> recipes = recipeRepository.findAll();
         //ALL CATEGORIES and KEYWORD is blank
+
+        model.addAttribute("category", category);
+        model.addAttribute("category", category);
+
         if (category == null) {
             for (Recipe recipe : recipes) {
                 foundRecipes.add(recipe);
@@ -115,6 +125,9 @@ public class SearchController {
         for (FilterParameter filterValue : filterParameter) {
             //filter is set to "All"
             if (filterValue.getName().equals("All")) {
+                filteredRecipes.clear();
+//                foundRecipes.clear();
+//                sortedRecipes.clear();
                 List<Recipe> allRecipes = (List<Recipe>) recipeRepository.findAll();
 
                 //render all recipes

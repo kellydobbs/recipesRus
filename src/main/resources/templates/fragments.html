@@ -12,8 +12,13 @@
     <link th:href="@{/css/style.css}" rel="stylesheet" />
     <link th:href="@{/css/rating.css}" rel="stylesheet" />
 
+    <script type="text/javascript">document.getElementById('category').value = "<?php echo $_GET['category'];?>"; </script>
+
+
+
 </head>
 <body>
+
 
 <header th:fragment="header">
 
@@ -35,8 +40,10 @@
 
                     <form action="/search/categoryResults" method="post" th:object="${recipe}">
                         <div class="left-space-header">
-                        <select class="btn btn-light" name="category" onchange="this.form.submit()">
-                            <option value="">All Categories</option>
+                        <select id ="category" class="btn btn-light" name="category" onchange="this.form.submit()">
+                            <option th:unless="${category == null}" th:value="${category}" th:text="${category.getName()}">
+                            </option>
+                            <option name="selectedValue" value="0">All Categories</option>
                             <option th:each="category:${categories}"
                                     th:value="${category}"
                                     th:text="${category.getName()}">
@@ -44,6 +51,8 @@
                         </select>
                     </div>
                     </form>
+
+
 
                     <div class=class="left-space-header">
                         <form class="d-flex" action="/search/keywordResults" method="post">

@@ -22,16 +22,16 @@
         </div>
     </form>
 
-        <form action="/search/filter" method="post" th:object="${recipe}">
-            <ul>
+    <form action="/search/filter" method="post" th:object="${recipe}">
+        <ul>
             <label th:for="filterTypes"> Filter by:</label>
-                <li th:each="filterType : ${filterTypes}">
-                    <input th:value="${filterType}" type="checkbox" name="filterParameter" >
-                    <label th:text="${filterType.getName()}"></label>
-                </li>
-                    <button class="btn btn-light" type="submit">Filter</button>
-                </ul>
-        </form>
+            <li th:each="filterType : ${filterTypes}">
+                <input th:value="${filterType}" type="checkbox" name="filterParameter" >
+                <label th:text="${filterType.getName()}"></label>
+            </li>
+            <button class="btn btn-light" type="submit">Filter</button>
+        </ul>
+    </form>
 
 
     <div class="row">
