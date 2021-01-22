@@ -21,7 +21,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("admin/index")
+@RequestMapping("admin/index/admin")
 public class AdminController extends AbstractController {
 
     @Autowired
@@ -63,13 +63,13 @@ public class AdminController extends AbstractController {
         return "admin/review";
     }
 
-    @RequestMapping("userrecipe")
+    @RequestMapping("recipe")
     public String userrecipe(Model model) {
 
         model.addAttribute("title", "Admin: User Recipes");
         model.addAttribute("review", userRecipeRepository.findAll());
 
-        return "admin/userrecipes";
+        return "admin/recipes";
 
     }
 
