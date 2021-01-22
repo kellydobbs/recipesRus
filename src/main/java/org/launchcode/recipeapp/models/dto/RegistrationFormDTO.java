@@ -1,5 +1,7 @@
 package org.launchcode.recipeapp.models.dto;
 
+import com.fasterxml.jackson.core.SerializableString;
+
 public class RegistrationFormDTO extends LoginFormDTO {
 
     private String verifyPassword;
@@ -11,5 +13,7 @@ public class RegistrationFormDTO extends LoginFormDTO {
     public void setVerifyPassword(String verifyPassword) {
         this.verifyPassword = verifyPassword;
     }
+
+
 
 }

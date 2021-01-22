@@ -11,6 +11,7 @@ import org.launchcode.recipeapp.models.data.UserRecipeRepository;
 import org.launchcode.recipeapp.models.data.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.rsocket.context.LocalRSocketServerPort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("admin/index/admin")
+@RequestMapping("admin")
 public class AdminController extends AbstractController {
 
     @Autowired
@@ -36,7 +37,7 @@ public class AdminController extends AbstractController {
     @Autowired
     private UserRecipeRepository userRecipeRepository;
 
-    @GetMapping("admin")
+    @GetMapping()
     public String index(Model model) {
         model.addAttribute("title", "Admin Links");
         return "admin/index";
@@ -45,7 +46,7 @@ public class AdminController extends AbstractController {
     }
 
 
-    @RequestMapping("recipe")
+    @GetMapping("recipe")
     public String recipesIndex(Model model) {
 
         model.addAttribute("title", "Admin: Recipes List");
@@ -54,7 +55,7 @@ public class AdminController extends AbstractController {
         return "admin/recipe";
     }
 
-    @RequestMapping("review")
+    @GetMapping("review")
     public String review(Model model) {
 
         model.addAttribute("title", "Admin: Reviews");
@@ -63,18 +64,9 @@ public class AdminController extends AbstractController {
         return "admin/review";
     }
 
-    @RequestMapping("recipe")
-    public String userrecipe(Model model) {
-
-        model.addAttribute("title", "Admin: User Recipes");
-        model.addAttribute("review", userRecipeRepository.findAll());
-
-        return "admin/recipes";
-
-    }
 
 
-    @GetMapping("admin/edit/{recipeId}")
+    @GetMapping("edit/{recipeId}")
     public String displayEditForm(Model model, @PathVariable int recipeId) {
 
         Category[] categories = Category.values();
@@ -123,7 +115,7 @@ public class AdminController extends AbstractController {
 
     }
 
-    @RequestMapping("/delete/{recipeId}")
+    @PostMapping("/delete/{recipeId}")
     public String handleDeleteUser(@PathVariable Integer recipeId) {
         Optional<Recipe> recipeOpt = recipeRepository.findById(recipeId);
         if (recipeOpt.isPresent()) {
@@ -133,11 +125,12 @@ public class AdminController extends AbstractController {
         return "redirect:/recipes";
     }
 
-    @RequestMapping("/save/{recipeId}")
+    @PostMapping("/save/{recipeId}")
     public String saveRecipeToUser(@PathVariable Integer recipeId) {
         return "index";
     }
-    @RequestMapping("user")
+
+    @GetMapping("user")
     public String userIndex(Model model) {
 
         model.addAttribute("title", "Admin: Users List");
