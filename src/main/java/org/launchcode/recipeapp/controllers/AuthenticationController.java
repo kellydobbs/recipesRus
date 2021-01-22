@@ -75,6 +75,7 @@ public class AuthenticationController extends AbstractController {
             model.addAttribute("title", "Register");
             return "register/user";        }
 
+        registrationFormDTO.setAccess("2");
         User newUser = new User(registrationFormDTO.getUsername(), registrationFormDTO.getPassword(), registrationFormDTO.getAccess(), registrationFormDTO.getEmail());
         userRepository.save(newUser);
         setUserInSession(request.getSession(), newUser);
@@ -111,13 +112,13 @@ public class AuthenticationController extends AbstractController {
             return "/register/admin";
 
         }
-
+        registrationFormDTO.setAccess("1");
         User newUser = new User(registrationFormDTO.getUsername(), registrationFormDTO.getPassword(), registrationFormDTO.getAccess(), registrationFormDTO.getEmail());
         userRepository.save(newUser);
         setUserInSession(request.getSession(), newUser);
 
         if (registrationFormDTO.getAccess().equals("1")){
-            return"redirect:/admin/index";
+            return"redirect:/admin";
         }
 
         return "redirect:/register/admin";

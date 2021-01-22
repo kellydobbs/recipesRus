@@ -46,13 +46,13 @@ public class AdminController extends AbstractController {
     }
 
 
-    @GetMapping("recipe")
+    @GetMapping("recipes")
     public String recipesIndex(Model model) {
 
         model.addAttribute("title", "Admin: Recipes List");
         model.addAttribute("recipes", recipeRepository.findByName(""));
 
-        return "admin/recipe";
+        return "admin/recipes";
     }
 
     @GetMapping("review")
@@ -66,7 +66,7 @@ public class AdminController extends AbstractController {
 
 
 
-    @GetMapping("edit/{recipeId}")
+    @GetMapping("editrecipes/{recipeId}")
     public String displayEditForm(Model model, @PathVariable int recipeId) {
 
         Category[] categories = Category.values();
