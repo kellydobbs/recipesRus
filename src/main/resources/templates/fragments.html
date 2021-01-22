@@ -27,10 +27,10 @@
                 <div class="left-header-btn">
 
                     <div id="login" class="left-space-header">
-                        <span th:if="${session.isEmpty()}"><a class="btn btn-light" th:href="@{/login}">Login</a></span>
+                        <span th:if="${session.isEmpty()}"><a class="btn btn-light" th:href="@{/register/login}">Login</a></span>
                     </div>
                     <div id="register" class="left-space-header">
-                        <span th:if="${session.isEmpty()}"><a class="btn btn-light" th:href="@{/register}">Register</a></span>
+                        <span th:if="${session.isEmpty()}"><a class="btn btn-light" th:href="@{/register/user}">Register</a></span>
                     </div>
                     <div id="all-recipes" class="left-space-header">
                         <span><a class="btn btn-light" th:href="@{/recipes/all}">All Recipes</a></span>
