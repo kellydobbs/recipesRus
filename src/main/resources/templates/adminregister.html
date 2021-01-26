@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body class="container">
+<div th:fragments="admin-nav">
+    <div id="admin=nav">
+        <h1>Admin Registration</h1>
+    </div>
+
+</div>
+<div class="container">
+    <form method="post" style="max-width:600px;">
+        <div class="form-group">
+            <label>Username
+                <input class="form-control" th:field="${registrationFormDTO.username}" />
+            </label>
+            <div class="error" th:errors="${registrationFormDTO.username}"></div>
+        </div>
+        <div class="form-group">
+
+            <div class="form-group">
+                <label>Password
+                    <input class="form-control" th:field="${registrationFormDTO.password}" type="password" />
+                </label>
+                <div class="error" th:errors="${registrationFormDTO.password}"></div>
+            </div>
+            <div class="form-group">
+                <label>Verify Password
+                    <input class="form-control" th:field="${registrationFormDTO.verifyPassword}" type="password" />
+                </label>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Register" />
+            <a class="btn btn-default btn-xs" href="/login">Login</a>
+
+            <div th:replace="fragments :: footer"></div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

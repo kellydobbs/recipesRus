@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: header"></div>
+<div class="border border-dark rounded p-3 m-5 w-25 mx-auto">
+    <form method="post">
+        <div th:fragments="admin-nav">
+            <div id="admin=nav">
+                <h3>Admin Home</h3>
+            </div>
+            <nav>
+                <ul class="admin portal">
+                    <li class="portal-opt"><a href="/adminregister">Admin Register</a> </li>
+                    <li class="portal-opt"><a href="/admin/editrecipes">Admin Edit Recipes</a></li>
+                    <li class="portal-opt"><a href="/recipes/edit-tags">Admin Edit Tags</a></li>
+                </ul>
+            </nav>
+        </div>
+    </form>
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>

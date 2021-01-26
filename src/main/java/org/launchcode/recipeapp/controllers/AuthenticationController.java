@@ -24,7 +24,7 @@ AuthenticationController {
     @Autowired
     UserRepository userRepository;
 
-    private  static final String userSessionKey = "user";
+    private static final String userSessionKey = "user";
 
     public User getUserFromSession(HttpSession session) {
         return (User) session.getAttribute(userSessionKey);
@@ -52,6 +52,7 @@ AuthenticationController {
         }
 
         User existingUser = userRepository.findByUsername(registrationFormDTO.getUsername());
+        String access = registrationFormDTO.getAccess();
 
         if (existingUser != null) {
             errors.rejectValue("username", "username.already exists", "A user with that username already exists");
@@ -67,11 +68,54 @@ AuthenticationController {
             return "register";
         }
 
-        User newUser = new User(registrationFormDTO.getUsername(), registrationFormDTO.getPassword());
+        registrationFormDTO.setAccess("2");
+        User newUser = new User(registrationFormDTO.getUsername(), registrationFormDTO.getPassword(), registrationFormDTO.getAccess());
         userRepository.save(newUser);
         setUserInSession(request.getSession(), newUser);
 
-        return "redirect:/home";
+        if (registrationFormDTO.getAccess().equals("2")) {
+            return "redirect:/login";
+        }
+        return "redirect:/register";
+    }
+
+    @GetMapping("/adminregister")
+    public String displayRegisterAdminForm(Model model) {
+        model.addAttribute(new RegistrationFormDTO());
+        model.addAttribute("title", "Register");
+        return "adminregister";
+    }
+
+    @PostMapping("/adminregister")
+    public String processRegisterAdminForm(@ModelAttribute @Valid RegistrationFormDTO registrationFormDTO,
+                                           Errors errors, HttpServletRequest request,
+                                           Model model) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Register");
+            return "/adminregister";
+        }
+
+        User existingUser = userRepository.findByUsername(registrationFormDTO.getUsername());
+        String access = registrationFormDTO.getAccess();
+
+        if (existingUser != null) {
+            errors.rejectValue("username", "username.already exists", "A user with that username already exists");
+            model.addAttribute("title", "Register");
+            return "/adminregister";
+
+        }
+
+        registrationFormDTO.setAccess("1");
+        User newUser = new User(registrationFormDTO.getUsername(), registrationFormDTO.getPassword(), registrationFormDTO.getAccess());
+        userRepository.save(newUser);
+        setUserInSession(request.getSession(), newUser);
+
+        if (registrationFormDTO.getAccess().equals("1")) {
+            return "redirect:/login";
+        }
+
+        return "redirect:/adminregister";
     }
 
     @GetMapping("/login")
@@ -93,6 +137,7 @@ AuthenticationController {
 
 
         User theUser = userRepository.findByUsername(loginFormDTO.getUsername());
+        String password = loginFormDTO.getPassword();
 
         if (theUser == null) {
             errors.rejectValue("username", "user.invalid", "The given username does not exist");
@@ -100,19 +145,26 @@ AuthenticationController {
             return "login";
         }
 
-        String password = loginFormDTO.getPassword();
-
         if (!theUser.isMatchingPassword(password)) {
             errors.rejectValue("password", "password.invalid", "Invalid password");
             model.addAttribute("title", "Log In");
             return "login";
         }
-
         setUserInSession(request.getSession(), theUser);
 
+
+        if (theUser.getAccess().equals("1")) {
+            return "redirect:admin";
+        }
+
+        if (theUser.getAccess().equals("2")){
+            return "redirect:users/profile";
+
+        } else {
         return "redirect:/home";
     }
 
+}
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request){

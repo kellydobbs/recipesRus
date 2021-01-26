@@ -51,6 +51,9 @@
                     <a th:if="${session.isEmpty()}" th:href="@{/register}" class="nav-link">Register</a>
                 </li>
                 <li class="nav-item">
+                    <a th:if="${session.isEmpty()}" th:href="@{/admin}" class="nav-link">Admin</a>
+                </li>
+                <li class="nav-item">
                     <a th:if="${session.user}" th:href="@{/logout}" class="nav-link">Logout</a>
                 </li>
             </ul>

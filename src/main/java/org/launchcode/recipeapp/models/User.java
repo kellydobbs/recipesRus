@@ -20,41 +20,42 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=false)
 public class User extends AbstractEntity {
 
-   /* @updated AH*/
+
 
    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 
-   @NotBlank(message = "UserName name is required")
+
+   @NotBlank(message = "Username is required")
    private String username;
 
 
    @NotBlank(message = "Password is required")
    private String pwHash;
 
-   @Column(name = "user_role")
-   private Role role;
-
    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
    private List<UserRecipe> recipes = new ArrayList<>();
 
+   private String access;
 
    public User() {
    }
 
-   public User(String username, String password) {
+   public User(String username, String password, String access) {
       this.username = username;
       this.pwHash = encoder.encode(password);
+      this.access = access;
    }
 
-   public boolean isMatchingPassword(String password) {
-      return encoder.matches(password, pwHash);
+   public boolean isMatchingPassword(String password) { return encoder.matches(password, pwHash); }
 
-   }
+   public String getAccess() { return access; }
 
    public String getUsername() {
       return username;
    }
+
+   public void setAccess(String access) { this.access = access; }
 
    public void setUsername(String username) {
       this.username = username;
