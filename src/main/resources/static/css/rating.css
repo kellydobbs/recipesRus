@@ -27,3 +27,17 @@ fieldset, label { margin: 0; padding: 0; }
 
 .rating > input:checked + label:hover, /* hover current star when changing rating */
 .rating > input:checked ~ label:hover,
+
+
+.no-ratings{
+    color: #d6d7d8;
+}
+
+.star-default{
+    color: #d6d7d8;
+}
+
+.active-star {
+    color: #FFD700;
+    display: inline;
+}

@@ -18,6 +18,15 @@
             </th:block>
             <p th:if="${recipe.averageRating} == null" class="card-text">Be the first to <a href="#submit-review">leave a review</a></p>
             <div th:unless="${recipe.averageRating} == null" id="has-reviews">
+                 <span>
+                    <i class="fas fa-star star-default" id="1star"></i>
+            <!--           <i class="fas fa-star-half-alt" id="1.5star"></i>-->
+                    <i class="fas fa-star star-default" id="2star"></i>
+                    <i class="fas fa-star star-default" id="3star"></i>
+                    <i class="fas fa-star star-default" id="4star"></i>
+                    <i class="fas fa-star star-default" id="5star"></i>
+                 </span>
+
                 <p th:text="'Average Rating: ' + ${recipe.averageRating}" class="card-text"></p>
                 <p th:text="'Total Ratings: ' + ${recipe.totalRatings}" class="card-text"></p>
             </div>
@@ -79,6 +88,41 @@
 
     </div>
 </div>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    let averageRating = /*[[${recipe.averageRating}]]*/;
+    let oneStar = document.getElementById("1star");
+    let twoStar = document.getElementById("2star");
+    let threeStar = document.getElementById("3star");
+    let fourStar = document.getElementById("4star");
+    let fiveStar = document.getElementById("5star");
+
+   console.log(averageRating);
+
+   function displayAverageRating(){
+      if (averageRating != 0) {
+        oneStar.classList.add("active-star");
+
+        if (averageRating >= 1.75) {
+            twoStar.classList.add("active-star");
+        }
+         if (averageRating >= 2.75) {
+            threeStar.classList.add("active-star");
+        }
+         if (averageRating >= 3.75) {
+            fourStar.classList.add("active-star");
+        }
+        if (averageRating >= 4.75){
+            fiveStar.classList.add("active-star");
+        }
+        }
+      }
+
+displayAverageRating();
+
+/*]]>*/
+</script>
+<script src="https://kit.fontawesome.com/423625802c.js" crossorigin="anonymous"></script>
 <div th:replace="fragments :: footer"></div>
 </body>
 </html>
