@@ -27,7 +27,7 @@
                     <i class="fas fa-star star-default" id="5star"></i>
                  </span>&nbsp;
 
-               <span th:unless="${recipe.averageRating == null}"></span>
+               <span th:unless="${recipe.averageRating == 0}">
                 <span th:text="${recipe.averageRating} + '/5'" class="card-text"></span></span>
 
                 <span>&nbsp; | &nbsp;</span>
