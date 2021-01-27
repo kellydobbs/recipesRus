@@ -16,8 +16,8 @@
             <th:block th:each="tag : ${recipe.tags}">
                 <a th:href="@{'/recipes/tag?id=' + ${tag.id}}"><p class="card-text d-inline" th:text="${tag.name +', '}"></p></a>
             </th:block>
-            <p th:if="${recipe.averageRating} == null" class="card-text">Be the first to <a href="#submit-review">leave a review</a></p>
-            <div th:unless="${recipe.averageRating} == null" id="has-reviews">
+            <br>
+            <div id="has-reviews">
                  <span>
                     <i class="fas fa-star star-default" id="1star"></i>
             <!--           <i class="fas fa-star-half-alt" id="1.5star"></i>-->
@@ -25,10 +25,27 @@
                     <i class="fas fa-star star-default" id="3star"></i>
                     <i class="fas fa-star star-default" id="4star"></i>
                     <i class="fas fa-star star-default" id="5star"></i>
-                 </span>
+                 </span>&nbsp;
 
-                <p th:text="'Average Rating: ' + ${recipe.averageRating}" class="card-text"></p>
-                <p th:text="'Total Ratings: ' + ${recipe.totalRatings}" class="card-text"></p>
+               <span th:unless="${recipe.averageRating == null}"></span>
+                <span th:text="${recipe.averageRating} + '/5'" class="card-text"></span></span>
+
+                <span>&nbsp; | &nbsp;</span>
+
+                <span th:unless="${recipe.totalRatings} == 1">
+                <span th:text="${recipe.totalRatings} + ' Ratings'" class="card-text"></span></span>
+
+                <span th:if="${recipe.totalRatings} == 1">
+                <span th:text="${recipe.totalRatings} + ' Rating'" class="card-text"></span></span>
+
+                <span>&nbsp; | &nbsp;</span>
+
+                <span th:unless="${recipe.numComments} == 1">
+                <span th:text="${recipe.numComments} + ' Reviews'" class="card-text"></span></span>
+
+                <span th:if="${recipe.numComments} == 1">
+                <span th:text="${recipe.numComments} + ' Review'" class="card-text"></span></span>
+
             </div>
            <div th:unless="${session.isEmpty()}">
                <p th:text="${title1}" style="color: red; font-size: 18px"></p>
@@ -122,7 +139,6 @@ displayAverageRating();
 
 /*]]>*/
 </script>
-<script src="https://kit.fontawesome.com/423625802c.js" crossorigin="anonymous"></script>
 <div th:replace="fragments :: footer"></div>
 </body>
 </html>

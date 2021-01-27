@@ -8,16 +8,16 @@ fieldset, label { margin: 0; padding: 0; }
 
 .rating > input { display: none; }
 .rating > label:before {
+  content: "\f005";
   margin: 5px;
   font-size: 1.25em;
   font-family: FontAwesome;
   display: inline-block;
-  content: "\f005";
 }
 
 .rating > label {
   color: #ddd;
- float: right;
+    float: right;
 }
 
 /***** Highlight Stars on Hover *****/
