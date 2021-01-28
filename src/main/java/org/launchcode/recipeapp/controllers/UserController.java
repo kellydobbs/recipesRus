@@ -149,7 +149,7 @@ public class UserController {
 
 
 //            IDK WHAT BUT ITS HERE THO
-            Collections.sort(recipes);
+            Collections.sort(recipes, new Recipe.SortByNameAsc());
 
             //render user recipes by ASCENDING NAME
             model.addAttribute("recipes", userRecipes);
