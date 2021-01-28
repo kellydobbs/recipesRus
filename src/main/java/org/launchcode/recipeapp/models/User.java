@@ -4,10 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +32,11 @@ public class User extends AbstractEntity {
    @Column(name = "user_role")
    private Role role;
 
-   @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-   private List<UserRecipe> recipes = new ArrayList<>();
+//   @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+//   private List<UserRecipe> recipes = new ArrayList<>();
+
+   @ManyToMany(mappedBy="users")
+   private List<Recipe> savedRecipes = new ArrayList<Recipe>();
 
 
    public User() {
@@ -58,5 +58,13 @@ public class User extends AbstractEntity {
 
    public void setUsername(String username) {
       this.username = username;
+   }
+
+   public List<Recipe> getSavedRecipes() {
+      return savedRecipes;
+   }
+
+   public void setSavedRecipes(List<Recipe> savedRecipes) {
+      this.savedRecipes = savedRecipes;
    }
 }

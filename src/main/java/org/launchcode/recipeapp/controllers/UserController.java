@@ -53,13 +53,7 @@ public class UserController {
       if (sessionUser == null) {
          model.addAttribute("title", "No user found");
       } else {
-         List<Recipe> recipes = new ArrayList<>();
-         List<UserRecipe> userRecipes = userRecipeRepository.getAllByUser(sessionUser);
-
-         for (UserRecipe userRecipe : userRecipes) {
-            Recipe recipe = userRecipe.getRecipe();
-            recipes.add(recipe);
-         }
+         List<Recipe> recipes = userRepository.getById(sessionUser.getId()).getSavedRecipes();
 
          model.addAttribute("title", sessionUser.getUsername());
          model.addAttribute("user", sessionUser);
@@ -77,23 +71,25 @@ public class UserController {
    public String addRecipe(@PathVariable Integer id, HttpServletRequest request, Model model,
                            RedirectAttributes redirectAttrs) {
       User sessionUser = (User) request.getSession().getAttribute("user");
-
       Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+
       if (recipeOptional.isPresent()) {
          User user = userRepository.getById(sessionUser.getId());
          Recipe recipe = recipeOptional.get();
+         List<Recipe> savedRecipes = user.getSavedRecipes();
 
-
-         UserRecipe userRecipe = new UserRecipe();
-         userRecipe.setUser(user);
-         userRecipe.setRecipe(recipe);
-
-         Optional<UserRecipe> recipeByUserOptional = userRecipeRepository.findByRecipeAndUser(recipe,user);
-         if (recipeByUserOptional.isPresent()) {
+         if (savedRecipes.contains(recipe)) {
             return "redirect:/recipes/display?recipeId="+recipe.getId();
          } else {
-            userRecipeRepository.save(userRecipe);
+            savedRecipes.add(recipe);
+            List<Recipe> newSavedRecipes = new ArrayList<>();
+            newSavedRecipes.addAll(savedRecipes);
+            user.setSavedRecipes(newSavedRecipes);
+            userRepository.save(user);
+            // doesn't save to repository or sql
+
          }
+
       }
 
       return "redirect:/users/profile";
@@ -103,26 +99,31 @@ public class UserController {
    public String deleteRecipeFromFavorite(@PathVariable Integer id, HttpServletRequest request, Model model) {
       User sessionUser = (User) request.getSession().getAttribute("user");
       User user = userRepository.getById(sessionUser.getId());
-      List<UserRecipe> userRecipes = userRecipeRepository.getAllByUser(user);
+
+      List<Recipe> savedRecipes = user.getSavedRecipes();
+
+
+     // List<UserRecipe> userRecipes = userRecipeRepository.getAllByUser(user);
 
       Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+
       if (recipeOptional.isPresent()) {
+         savedRecipes.remove(recipeOptional.get());
 
-         Recipe recipe = recipeOptional.get();
-
-
-         for (UserRecipe userRecipe : userRecipes) {
-            Optional<Recipe> recipeOpt = recipeRepository.findById(userRecipe.getRecipe().getId());
-            if (recipeOpt.isPresent()) {
-               Recipe recipe1 = recipeOpt.get();
-               if (recipe1.getId() == recipe.getId()) {
-
-                  userRecipeRepository.delete(userRecipe);
-
-               }
-
-            }
-         }
+//         Recipe recipe = recipeOptional.get();
+//
+//         for (UserRecipe userRecipe : userRecipes) {
+//            Optional<Recipe> recipeOpt = recipeRepository.findById(userRecipe.getRecipe().getId());
+//            if (recipeOpt.isPresent()) {
+//               Recipe recipe1 = recipeOpt.get();
+//               if (recipe1.getId() == recipe.getId()) {
+//
+//                  userRecipeRepository.delete(userRecipe);
+//
+//               }
+//
+//            }
+//         }
 
       }
 

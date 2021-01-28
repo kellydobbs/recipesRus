@@ -44,21 +44,20 @@ public class RecipeController {
    private final ReviewRepository reviewRepository;
    private final UserRecipeRepository userRecipeRepository;
    private final TagRepository tagRepository;
-
+   private final UserRepository userRepository;
 
    @Autowired
-   public RecipeController(RecipeRepository recipeRepository,
-                           IngredientRepository ingredientRepository,
-                           InstructionRepository instructionRepository,
-                           UserRecipeRepository userRecipeRepository,
-                           ReviewRepository reviewRepository, TagRepository tagRepository) {
+   public RecipeController(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, InstructionRepository instructionRepository, ReviewRepository reviewRepository, UserRecipeRepository userRecipeRepository, TagRepository tagRepository, UserRepository userRepository) {
       this.recipeRepository = recipeRepository;
-      this.userRecipeRepository = userRecipeRepository;
       this.ingredientRepository = ingredientRepository;
       this.instructionRepository = instructionRepository;
       this.reviewRepository = reviewRepository;
+      this.userRecipeRepository = userRecipeRepository;
       this.tagRepository = tagRepository;
+      this.userRepository = userRepository;
    }
+
+
 
 
    @GetMapping
@@ -143,16 +142,19 @@ public class RecipeController {
          model.addAttribute("recipe", recipe);
          User sessionUser = (User) request.getSession().getAttribute("user");
 
-         Optional<UserRecipe> recipeByUserOptional = userRecipeRepository.findByRecipeAndUser(recipe,sessionUser);
+         // Optional<UserRecipe> recipeByUserOptional = userRecipeRepository.findByRecipeAndUser(recipe,sessionUser);
+         if (sessionUser != null ){
+            List<Recipe> savedRecipes = userRepository.getById(sessionUser.getId()).getSavedRecipes();
 
-         boolean isFavourite;
-         if (recipeByUserOptional.isPresent()) {
-            isFavourite = true;
-            model.addAttribute("title1", "This recipe has already been added to your profile ");
-         } else {
-            isFavourite = false;
+            boolean isFavourite;
+            if (savedRecipes.contains(recipe)) {
+               isFavourite = true;
+               model.addAttribute("title1", "This recipe has already been added to your profile ");
+            } else {
+               isFavourite = false;
+            }
+            model.addAttribute("isFavourite", isFavourite);
          }
-         model.addAttribute("isFavourite", isFavourite);
       }
 
       return "recipes/display";
@@ -172,11 +174,14 @@ public class RecipeController {
       Collections.sort(reviews, recipe.getComparator());
       model.addAttribute("reviews", reviews);
 
+      User sessionUser = (User) request.getSession().getAttribute("user");
+      List<Recipe> savedRecipes = userRepository.getById(sessionUser.getId()).getSavedRecipes();
+
       if (errors.hasErrors()) {
-         User sessionUser = (User) request.getSession().getAttribute("user");
-         Optional<UserRecipe> recipeByUserOptional = userRecipeRepository.findByRecipeAndUser(recipe,sessionUser);
+//         Optional<UserRecipe> recipeByUserOptional = userRecipeRepository.findByRecipeAndUser(recipe,sessionUser);
+
          boolean isFavourite;
-         if (recipeByUserOptional.isPresent()) {
+         if (savedRecipes.contains(recipe)) {
             isFavourite = true;
             model.addAttribute("title1", "This recipe has already been added to your profile ");
          } else {
@@ -186,12 +191,15 @@ public class RecipeController {
          return "recipes/display";
       }
 
+
+
       // add review & update recipe calculations
-      User sessionUser = (User) request.getSession().getAttribute("user");
       Review review = new Review(recipe, newReview.getRating(), newReview.getComment(), sessionUser, sessionUser.getUsername(), recipe.getCurrentTime());
       reviewRepository.save(review);
       review.updateCalculations(recipe,review);
       recipeRepository.save(recipe);
+
+
 
       return "redirect:/recipes/display?recipeId="+recipeId;
    }

@@ -6,10 +6,7 @@ import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
@@ -53,9 +50,12 @@ public class Recipe extends AbstractEntity {
    @OneToMany(mappedBy = "recipe")
    private final List<Review> reviews = new ArrayList<>();
 
-   @OneToMany(mappedBy = "recipe", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-   @NotNull(message = "User is required")
-   private List<UserRecipe> users = new ArrayList<>();
+//   @OneToMany(mappedBy = "recipe", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+//   @NotNull(message = "User is required")
+//   private List<UserRecipe> users = new ArrayList<>();
+
+   @ManyToMany
+   private List<User> users = new ArrayList<User>();
 
    //// Used for sorting in ascending order of name
    public static class SortByNameAsc implements Comparator<Recipe> {
@@ -121,13 +121,21 @@ public class Recipe extends AbstractEntity {
       this.category = category;
    }
 
-   public List<UserRecipe> getUsers() {
+   public List<User> getUsers() {
       return users;
    }
 
-   public void setUsers(List<UserRecipe> users) {
+   public void setUsers(List<User> users) {
       this.users = users;
    }
+
+//   public List<UserRecipe> getUsers() {
+//      return users;
+//   }
+//
+//   public void setUsers(List<UserRecipe> users) {
+//      this.users = users;
+//   }
 
    public String getImg() {
       return img;
