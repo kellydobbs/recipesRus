@@ -14,7 +14,6 @@ import java.util.List;
  * @author Oksana
  */
 @EqualsAndHashCode(callSuper = true)
-//@Data
 @Entity
 public class Tag extends AbstractEntity {
    @NotBlank(message = "Tag name required")
