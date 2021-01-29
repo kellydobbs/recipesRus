@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,13 @@ public class AdminController {
     private UserRepository userRepository;
 
     @Autowired
+    private UserRecipeRepository userRecipeRepository;
+
+    @Autowired
     private RecipeRepository recipeRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Autowired
     private TagRepository tagRepository;
@@ -34,7 +41,7 @@ public class AdminController {
     @Autowired
     private InstructionRepository instructionRepository;
 
-    private  static final String userSessionKey = "user";
+    private static final String userSessionKey = "user";
 
     public User getUserFromSession(HttpSession session) {
         return (User) session.getAttribute(userSessionKey);
@@ -50,41 +57,49 @@ public class AdminController {
         return "admin/index";
 
     }
-
-    @GetMapping("editrecipes/{recipeId}")
-    public String displayEditForm(Model model, @PathVariable int recipeId) {
-
-        Category[] categories = Category.values();
-        Measurement[] measurements = Measurement.values();
-        Iterable<Tag> tags = tagRepository.findAll();
-
-        Optional<Recipe> recipeOpt = recipeRepository.findById(recipeId);
-        if (recipeOpt.isPresent()) {
-            Recipe recipe = recipeOpt.get();
-            List<Instruction> instructions = instructionRepository.findByRecipeId(recipe.getId());
-            List<Ingredient> ingredients = ingredientRepository.findByRecipeId(recipe.getId());
-            model.addAttribute("ingredients", ingredients);
-            model.addAttribute("instructions", instructions);
-            model.addAttribute("recipe", recipe);
-            model.addAttribute("title", "Edit recipe " + recipe.getName());
-            model.addAttribute("recipeId", recipe.getId());
+    @GetMapping("/profile")
+    public String getUserProfile(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+        User sessionUser = (User) request.getSession().getAttribute("user");
+        if (sessionUser == null) {
+            model.addAttribute("title", "No user found");
         } else {
-            model.addAttribute("recipe", new Recipe());
-        }
-        model.addAttribute("categories", categories);
-        model.addAttribute("measurements", measurements);
-        model.addAttribute("tags", tags);
+            List<Recipe> recipes = new ArrayList<>();
+            List<UserRecipe> userRecipes = userRecipeRepository.getAllByUser(sessionUser);
 
-        return "/recipes/edit";
+            for (UserRecipe userRecipe : userRecipes) {
+                Recipe recipe = userRecipe.getRecipe();
+                recipes.add(recipe);
+            }
+
+            model.addAttribute("title", sessionUser.getUsername());
+            model.addAttribute("user", sessionUser);
+            model.addAttribute("recipes", recipes);
+            model.addAttribute("title1", redirectAttributes.getAttribute("title1"));
+
+        }
+        return "admin/profile";
+    }
+
+
+    @GetMapping("all")
+    public String getAllRecipes (Model model){
+
+        List<Recipe> all = ((List<Recipe>) recipeRepository.findAll());
+
+        model.addAttribute("recipes", all);
+
+        return "recipes/all";
 
     }
 
-    @PostMapping("edit")
+
+
+    @PostMapping("recipes/edit{recipesId})")
     public String processEditForm(HttpServletRequest request, Integer recipeId, @ModelAttribute Recipe newRecipe,
                                   Errors errors, Model model, RedirectAttributes redirectAttrs) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Edit Recipe");
-            return "admin/editrecipes";
+            return "recipes/edit";
         }
 
         String[] ingredients = request.getParameterValues("ingredient");
@@ -136,7 +151,30 @@ public class AdminController {
 
 
         }
-        return "redirect:";
+        return "redirect:/recipes";
 
     }
+
+    @RequestMapping("/delete/{recipeId}")
+    public String handleDeleteUser(@PathVariable Integer recipeId) {
+        Optional<Recipe> recipeOpt = recipeRepository.findById(recipeId);
+        List<Review> reviews = recipeOpt.get().getReviews();
+        if (recipeOpt.isPresent()) {
+            for (int i = 0; i < reviews.size(); i++){
+                Review review = reviews.get(i);
+                review.setUser(null);
+                reviewRepository.deleteById(review.getId());
+            }
+            recipeRepository.deleteById(recipeId);
+        }
+
+        return "redirect:/recipes";
+    }
+
+    @RequestMapping("/save/{recipeId}")
+    public String saveRecipeToUser(@PathVariable Integer recipeId) {
+        return "index";
+    }
+
 }
+

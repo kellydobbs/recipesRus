@@ -111,11 +111,8 @@ AuthenticationController {
         userRepository.save(newUser);
         setUserInSession(request.getSession(), newUser);
 
-        if (registrationFormDTO.getAccess().equals("1")) {
-            return "redirect:/login";
-        }
 
-        return "redirect:/adminregister";
+        return "redirect:/admin";
     }
 
     @GetMapping("/login")
