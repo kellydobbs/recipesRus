@@ -27,7 +27,7 @@
                     <i class="fas fa-star star-default" id="5star"></i>
                  </span>&nbsp;
 
-               <span th:unless="${recipe.averageRating == 0}">
+               <span th:unless="${recipe.averageRating == null or recipe.averageRating == 0}">
                 <span th:text="${recipe.averageRating} + '/5'" class="card-text"></span></span>
 
                 <span>&nbsp; | &nbsp;</span>
@@ -71,11 +71,16 @@
             <form method="post"  th:object="${review}">
                 <input type="hidden" id="recipeId" name="recipeId" th:value="${recipe.id}" class="form-control">
                 <fieldset class="rating">
-                    <input type="radio" id="5" th:field="*{rating}" value="5" /><label class = "full" for="5"></label>
-                    <input type="radio" id="4" th:field="*{rating}" value="4" /><label class = "full" for="4"></label>
-                    <input type="radio" id="3" th:field="*{rating}" value="3" /><label class = "full" for="3"></label>
-                    <input type="radio" id="2" th:field="*{rating}" value="2" /><label class = "full" for="2"></label>
-                    <input type="radio" id="1" th:field="*{rating}" value="1" /><label class = "full" for="1"></label>
+                <input type="radio" th:field="*{rating}" id="5" value="5">
+                    <label for="5" class="fas fa-star full star"></label>
+                <input type="radio" th:field="*{rating}" id="4" value="4">
+                    <label for="4" class="fas fa-star full star"></label>
+                <input type="radio" th:field="*{rating}" id="3" value="3">
+                    <label for="3" class="fas fa-star full star"></label>
+                <input type="radio" th:field="*{rating}" id="2" value="2">
+                    <label for="2" class="fas fa-star full star"></label>
+                <input type="radio" th:field="*{rating}" id="1" value="1">
+                    <label for="1" class="fas fa-star full star"></label>
                 </fieldset>
                 <p class="error" th:errors="${review.rating}"></p><br><br>
                 <input type="hidden" th:field="*{user}" th:value="${user}">
@@ -117,9 +122,8 @@
    console.log(averageRating);
 
    function displayAverageRating(){
-      if (averageRating != 0) {
-        oneStar.classList.add("active-star");
-
+      if (averageRating >= 1) {
+            oneStar.classList.add("active-star");
         if (averageRating >= 1.75) {
             twoStar.classList.add("active-star");
         }
