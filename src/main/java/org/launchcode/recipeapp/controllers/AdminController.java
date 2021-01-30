@@ -1,5 +1,6 @@
 package org.launchcode.recipeapp.controllers;
 
+import org.dom4j.rule.Mode;
 import org.launchcode.recipeapp.models.*;
 import org.launchcode.recipeapp.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,87 +95,14 @@ public class AdminController {
 
 
 
-    @PostMapping("recipes/edit{recipesId})")
-    public String processEditForm(HttpServletRequest request, Integer recipeId, @ModelAttribute Recipe newRecipe,
-                                  Errors errors, Model model, RedirectAttributes redirectAttrs) {
+    @PostMapping("edit-users")
+    public String processEditUser(HttpServletRequest request, Integer userId, @ModelAttribute User newUser,
+                                  Errors errors, Model model,  RedirectAttributes redirectAttributes) {
         if (errors.hasErrors()) {
-            model.addAttribute("title", "Edit Recipe");
-            return "recipes/edit";
+            model.addAttribute("title", "Edit User");
+            return "admin/edit-user";
         }
-
-        String[] ingredients = request.getParameterValues("ingredient");
-        String[] instructions = request.getParameterValues("instruction");
-        String[] measurements = request.getParameterValues("measurement");
-        String[] quantity = request.getParameterValues("quantity");
-
-        List<Ingredient> ingredientsList = new ArrayList<Ingredient>();
-        List<Instruction> instructionsList = new ArrayList<Instruction>();
-
-
-        Optional<Recipe> recipeOpt = recipeRepository.findById(recipeId);
-        if (recipeOpt.isPresent()) {
-            Recipe recipe = recipeOpt.get();
-
-            List<Ingredient> ingredientsToDelete = ingredientRepository.findByRecipeId(recipe.getId());
-            for (int i = 0; i < ingredientsToDelete.size(); i++) {
-                ingredientRepository.delete(ingredientsToDelete.get(i));
-            }
-            List<Instruction> instructionsToDelete = instructionRepository.findByRecipeId(recipe.getId());
-            for (int i = 0; i < instructionsToDelete.size(); i++) {
-                instructionRepository.delete(instructionsToDelete.get(i));
-            }
-
-            recipe.setCategory(newRecipe.getCategory());
-            recipe.setImg(newRecipe.getImg());
-            recipe.setName(newRecipe.getName());
-            recipe.setTags(newRecipe.getTags());
-
-            for (int i = 0; i < ingredients.length; i++) {
-                Ingredient newIngredient = new Ingredient(ingredients[i], Double.parseDouble(quantity[i]), measurements[i]);
-                newIngredient.setRecipe(recipe);
-                ingredientsList.add(newIngredient);
-                ingredientRepository.save(newIngredient);
-            }
-
-            for (int i = 0; i < instructions.length; i++) {
-                Instruction newInstruction = new Instruction(instructions[i]);
-                newInstruction.setRecipe(recipe);
-                instructionsList.add(newInstruction);
-                instructionRepository.save(newInstruction);
-            }
-
-
-            Recipe savedRecipe = recipeRepository.save(recipe);
-            Iterable<Recipe> recipes = recipeRepository.findAll();
-
-            redirectAttrs.addAttribute("recipes", recipes);
-
-
-        }
-        return "redirect:/recipes";
-
+        return "redirect:/admin";
     }
-
-    @RequestMapping("/delete/{recipeId}")
-    public String handleDeleteUser(@PathVariable Integer recipeId) {
-        Optional<Recipe> recipeOpt = recipeRepository.findById(recipeId);
-        List<Review> reviews = recipeOpt.get().getReviews();
-        if (recipeOpt.isPresent()) {
-            for (int i = 0; i < reviews.size(); i++){
-                Review review = reviews.get(i);
-                review.setUser(null);
-                reviewRepository.deleteById(review.getId());
-            }
-            recipeRepository.deleteById(recipeId);
-        }
-
-        return "redirect:/recipes";
-    }
-
-    @RequestMapping("/save/{recipeId}")
-    public String saveRecipeToUser(@PathVariable Integer recipeId) {
-        return "index";
-    }
-
 }
 

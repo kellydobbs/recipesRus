@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: header"></div>
+<div class="container">
+
+    <h1>Recipes:</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Recipes</th>
+        </tr>
+        </thead>
+        <tr th:each="recipe:${recipes}">
+            <td><a th:text="${recipe.name}" th:href="'/recipes/display?recipeId=' + ${recipe.id}"></a></td>
+            <td>
+                <a th:href="@{/recipes/edit/{id}(id=${recipe.id})}">Edit</a>
+            </td>
+            <td>
+
+
+                <a th:href="@{/recipes/delete/{id}(id=${recipe.id})}">Delete</a>
+            </td>
+        </tr>
+
+    </table>
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>
+l>
