@@ -1,6 +1,5 @@
 package org.launchcode.recipeapp.controllers;
 
-import org.dom4j.rule.Mode;
 import org.launchcode.recipeapp.models.*;
 import org.launchcode.recipeapp.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +57,7 @@ public class AdminController {
         return "admin/index";
 
     }
+
     @GetMapping("/profile")
     public String getUserProfile(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
         User sessionUser = (User) request.getSession().getAttribute("user");
@@ -82,8 +82,33 @@ public class AdminController {
     }
 
 
+    @RequestMapping("users")
+    public String getTableOfAllUsers(Model model) {
+
+        model.addAttribute("title", "All Users");
+        model.addAttribute("users", userRepository.findAll());
+        return "admin/users";
+    }
+
+    @GetMapping("edit-users/{usersid}")
+    public String displayUserEditForm(Model model, @PathVariable int userId) {
+
+        model.addAttribute("title", "Edit Users");
+        model.addAttribute("users", userRepository.findById(userId));
+        return "admin/edit-users";
+
+
+    }
+
+    @PostMapping("edit-users/{usersid}")
+    public String processUserEditForm( Model model, @PathVariable int userId,
+                                       @ModelAttribute User newUser){
+
+    return "admin/edit-users";
+
+}
     @GetMapping("all")
-    public String getAllRecipes (Model model){
+    public String getAllRecipes(Model model) {
 
         List<Recipe> all = ((List<Recipe>) recipeRepository.findAll());
 
@@ -92,17 +117,57 @@ public class AdminController {
         return "recipes/all";
 
     }
+    @GetMapping("create")
+    public String createRecipe(Model model) {
+        Category[] categories = Category.values();
+        Measurement[] measurements = Measurement.values();
+        Iterable<Tag> tags = tagRepository.findAll();
 
+        model.addAttribute("title", "Create Recipe");
+        model.addAttribute("recipe", new Recipe());
+        model.addAttribute("categories", categories);
+        model.addAttribute("tags", tags);
+        model.addAttribute("measurements", measurements);
 
-
-    @PostMapping("edit-users")
-    public String processEditUser(HttpServletRequest request, Integer userId, @ModelAttribute User newUser,
-                                  Errors errors, Model model,  RedirectAttributes redirectAttributes) {
-        if (errors.hasErrors()) {
-            model.addAttribute("title", "Edit User");
-            return "admin/edit-user";
-        }
-        return "redirect:/admin";
+        return "recipes/create";
     }
-}
 
+    @PostMapping("create")
+    public String createRecipe(HttpServletRequest request, @ModelAttribute Recipe newRecipe,
+                               @ModelAttribute @Valid String newCategory,
+                               Errors errors, Model model, RedirectAttributes redirectAttrs) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Create Recipe");
+            return "recipes/create";
+        }
+
+        String[] ingredients = request.getParameterValues("ingredient");
+        String[] instructions = request.getParameterValues("instruction");
+        String[] measurements = request.getParameterValues("measurement");
+        String[] quantity = request.getParameterValues("quantity");
+
+        List<Ingredient> ingredientsList = new ArrayList<Ingredient>();
+        List<Instruction> instructionsList = new ArrayList<Instruction>();
+
+        Recipe recipe = recipeRepository.save(newRecipe);
+
+
+        for (int i = 0; i < ingredients.length; i++) {
+            Ingredient newIngredient = new Ingredient(ingredients[i], Double.parseDouble(quantity[i]), measurements[i]);
+            newIngredient.setRecipe(recipe);
+            ingredientsList.add(newIngredient);
+            ingredientRepository.save(newIngredient);
+        }
+        for (int i = 0; i < instructions.length; i++) {
+            Instruction newInstruction = new Instruction(instructions[i]);
+            newInstruction.setRecipe(recipe);
+            instructionsList.add(newInstruction);
+            instructionRepository.save(newInstruction);
+        }
+        redirectAttrs.addAttribute("recipeId", recipe.getId());
+
+        return "redirect:/recipes/display";
+    }
+
+}
