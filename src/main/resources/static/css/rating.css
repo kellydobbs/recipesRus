@@ -35,6 +35,10 @@ fieldset, label { margin: 0; padding: 0; }
     color: #d6d7d8;
 }
 
+.hidden-star {
+    display: none !important;
+}
+
 .active-star {
     color: #FFD700;
     display: inline;

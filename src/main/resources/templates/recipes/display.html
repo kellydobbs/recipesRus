@@ -19,12 +19,15 @@
             <br>
             <div id="has-reviews">
                  <span>
-                    <i class="fas fa-star star-default" id="1star"></i>
-            <!--           <i class="fas fa-star-half-alt" id="1.5star"></i>-->
-                    <i class="fas fa-star star-default" id="2star"></i>
-                    <i class="fas fa-star star-default" id="3star"></i>
-                    <i class="fas fa-star star-default" id="4star"></i>
-                    <i class="fas fa-star star-default" id="5star"></i>
+                     <i class="fas fa-star star-default" id="1star"></i>
+                     <i class="fas fa-star-half-alt" id="1.5star"></i>
+                     <i class="fas fa-star star-default" id="2star"></i>
+                     <i class="fas fa-star-half-alt" id="2.5star"></i>
+                     <i class="fas fa-star star-default" id="3star"></i>
+                     <i class="fas fa-star-half-alt" id="3.5star"></i>
+                     <i class="fas fa-star star-default" id="4star"></i>
+                     <i class="fas fa-star-half-alt" id="4.5star"></i>
+                     <i class="fas fa-star star-default" id="5star"></i>
                  </span>&nbsp;
 
                <span th:unless="${recipe.averageRating == null or recipe.averageRating == 0}">
@@ -118,26 +121,66 @@
     let threeStar = document.getElementById("3star");
     let fourStar = document.getElementById("4star");
     let fiveStar = document.getElementById("5star");
+    let oneHalfStar = document.getElementById("1.5star");
+    let twoHalfStar = document.getElementById("2.5star");
+    let threeHalfStar = document.getElementById("3.5star");
+    let fourHalfStar = document.getElementById("4.5star");
 
    console.log(averageRating);
 
    function displayAverageRating(){
-      if (averageRating >= 1) {
-            oneStar.classList.add("active-star");
+    let fullStars = [oneStar,twoStar,threeStar,fourStar,fiveStar];
+    let halfStars = [oneHalfStar,twoHalfStar,threeHalfStar,fourHalfStar];
+    let allStars = [fullStars,halfStars];
+
+   // reset stars
+    for(let i=0; i < allStars.length; i++ ){
+        for (let j=0; j < allStars[i].length; j++ ) {
+                allStars[i][j].classList.remove("active-star");
+             }
+        }
+
+    for(let i=0; i <  halfStars.length; i++ ){
+        halfStars[i].classList.add("hidden-star");
+    }
+
+    // add active class
+        if (averageRating >= 1) {
+                 oneStar.classList.add("active-star");
+            }
+        if (averageRating >= 1.25 && averageRating < 1.75) {
+                oneHalfStar.classList.remove("hidden-star");
+                oneHalfStar.classList.add("active-star");
+                twoStar.classList.add("hidden-star");
+            }
         if (averageRating >= 1.75) {
-            twoStar.classList.add("active-star");
-        }
+                twoStar.classList.add("active-star");
+            }
+        if (averageRating >= 2.25 && averageRating < 2.75) {
+                twoHalfStar.classList.remove("hidden-star");
+                twoHalfStar.classList.add("active-star");
+                threeStar.classList.add("hidden-star");
+            }
          if (averageRating >= 2.75) {
-            threeStar.classList.add("active-star");
-        }
+                threeStar.classList.add("active-star");
+            }
+        if (averageRating >= 3.25 && averageRating < 3.75) {
+                threeHalfStar.classList.remove("hidden-star");
+                threeHalfStar.classList.add("active-star");
+                fourStar.classList.add("hidden-star");
+            }
          if (averageRating >= 3.75) {
-            fourStar.classList.add("active-star");
-        }
+                fourStar.classList.add("active-star");
+            }
+        if (averageRating >= 4.25 && averageRating < 4.75) {
+                fourHalfStar.classList.remove("hidden-star");
+                fourHalfStar.classList.add("active-star");
+                fiveStar.classList.add("hidden-star");
+            }
         if (averageRating >= 4.75){
-            fiveStar.classList.add("active-star");
+                fiveStar.classList.add("active-star");
+            }
         }
-        }
-      }
 
 displayAverageRating();
 
