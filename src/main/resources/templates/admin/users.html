@@ -8,17 +8,24 @@
 
     <h1>Users</h1>
     <table class="table table-striped">
-
         <thead>
         <th>ID</th>
         <th>User name</th>
         <th>Access</th>
-        <th></th>
         </thead>
+
+
     </table>
 </div>
-
-
 <div th:replace="fragments :: footer"></div>
 </body>
 </html>
+<!--<tr th:each="user : ${users}">-->
+<!--    <td th:text="${user.username}" th:href="@{'/admin/users?userId=' + ${user.id}"></td>-->
+<!--    <td>-->
+<!--        <a  th:text="@{/admin/edit-users/{id}(id=${user.id})}">Edit</a>-->
+<!--    </td>-->
+<!--    <td>-->
+<!--        <a th:href="@{/users/delete/{}id(id=${user.id})}">Delete</a>-->
+<!--    </td>-->
+<!--</tr>-->

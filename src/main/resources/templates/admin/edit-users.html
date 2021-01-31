@@ -8,14 +8,17 @@
 
     <h1>Users</h1>
     <table class="table table-striped">
-        <p th:unless="${users}">
-            <thead>
-            <th>ID</th>
-            <th>User name</th>
-            <th>Access</th>
-            </thead>
-
-        </p>
+        <thead>
+        <th>ID</th>
+        <th>User name</th>
+        <th>Access</th>
+        </thead>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.username}"></td>
+            <td>
+                <a th:href="@{'/admin/users?id=' + ${user.id}" th:text="${users.size()}}"></a>
     </table>
+</div>
+
 </body>
 </html>
