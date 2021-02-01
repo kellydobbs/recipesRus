@@ -6,24 +6,13 @@
 
 <div class="container">
 
-    <h1>Edit User Profiles</h1>
+    <h1>Edit User Profiles * Coming Soon</h1>
     <table class="table table-striped">
         <thead>
         <tr>
             <th>User name</th>
             <th>Access</th>
             <th>User Recipes</th>
-            <div class="card-deck justify-content-center pt-5">
-                <div class="card col-2 thumb-post p-1" th:each="recipe:${recipes}">
-                    <a th:href="'/recipes/display?recipeId=' + ${recipe.id}"><div class="imagecontainer"><img class="card-img-top img my-auto" th:src="${recipe.img}" alt="Card image cap"></div></a>
-                    <div class="card-body">
-                        <h5 class="card-title"><a th:href="'/recipes/display?recipeId=' + ${recipe.id}" th:text="${recipe.name}"></a></h5>
-                        <form method="post" th:action="'/users/deleteRecipe/' + ${recipe.id}">
-                            <input class="btn btn-danger" id="delete_button" value="Delete from favorite" type="submit" >
-                        </form>
-                    </div>
-                </div>
-            </div>
         </tr>
         </thead>
     </table>
