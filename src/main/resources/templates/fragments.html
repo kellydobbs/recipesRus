@@ -54,10 +54,10 @@
                     <a th:if="${session.isEmpty()}" th:href="@{/adminregister}" class="nav-link">Admin</a>
                 </li>
                 <li class="nav-item">
-                    <a th:if="${session.user}" th:href="@{/admin}" class="nav-link">Admin Portal</a>
+                    <a th:if="${session.user == true} and ${user.access == '1'}" th:href="@{/admin}" class="nav-link">Admin Portal</a>
                 </li>
                 <li class="nav-item">
-                    <a th:if="${session.user}" th:href="@{/logout}" class="nav-link">Logout</a>
+                    <a th:if="${session.user }" th:href="@{/logout}" class="nav-link">Logout</a>
                 </li>
             </ul>
         </div>
