@@ -9,6 +9,7 @@
 <div th:replace="fragments :: header"></div>
 <div class="container">
     <h1>Create a New Recipe</h1>
+    <p>Admin</p>
     <form th:action="@{/recipes/create}" class="py-5" method="POST" th:object="${recipe}">
         <div class="form-group">
             <label for="name">Recipe Name</label>

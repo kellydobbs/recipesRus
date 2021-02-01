@@ -104,6 +104,7 @@ public class AdminController {
     public String processUserEditForm( Model model, @PathVariable int userId,
                                        @ModelAttribute User newUser){
 
+
     return "admin/edit-users";
 
 }
@@ -118,7 +119,7 @@ public class AdminController {
 
     }
     @GetMapping("create")
-    public String createRecipe(Model model) {
+    public String createAdminRecipe(Model model) {
         Category[] categories = Category.values();
         Measurement[] measurements = Measurement.values();
         Iterable<Tag> tags = tagRepository.findAll();
@@ -133,13 +134,13 @@ public class AdminController {
     }
 
     @PostMapping("create")
-    public String createRecipe(HttpServletRequest request, @ModelAttribute Recipe newRecipe,
+    public String createAdminRecipe(HttpServletRequest request, @ModelAttribute Recipe newRecipe,
                                @ModelAttribute @Valid String newCategory,
                                Errors errors, Model model, RedirectAttributes redirectAttrs) {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Create Recipe");
-            return "recipes/create";
+            return "admin/create";
         }
 
         String[] ingredients = request.getParameterValues("ingredient");
