@@ -1,5 +1,6 @@
 package org.launchcode.recipeapp.controllers;
 
+import com.sun.xml.bind.util.AttributesImpl;
 import org.launchcode.recipeapp.models.data.UserRepository;
 import org.launchcode.recipeapp.models.dto.LoginFormDTO;
 import org.launchcode.recipeapp.models.User;
@@ -42,7 +43,7 @@ AuthenticationController {
     }
 
     @PostMapping("/register")
-    public String processRegistrationForm(@ModelAttribute @Valid RegistrationFormDTO registrationFormDTO,
+    public String processRegistrationForm(HttpSession session, @ModelAttribute @Valid RegistrationFormDTO registrationFormDTO,
                                           Errors errors, HttpServletRequest request,
                                           Model model) {
 
@@ -87,7 +88,7 @@ AuthenticationController {
     }
 
     @PostMapping("/adminregister")
-    public String processRegisterAdminForm(@ModelAttribute @Valid RegistrationFormDTO registrationFormDTO,
+    public String processRegisterAdminForm(HttpSession session, @ModelAttribute @Valid RegistrationFormDTO registrationFormDTO,
                                            Errors errors, HttpServletRequest request,
                                            Model model) {
 
@@ -123,7 +124,7 @@ AuthenticationController {
     }
 
     @PostMapping("/login")
-    public String processLoginForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
+    public String processLoginForm(HttpSession session, @ModelAttribute @Valid LoginFormDTO loginFormDTO,
                                    Errors errors, HttpServletRequest request,
                                    Model model) {
 
@@ -147,6 +148,8 @@ AuthenticationController {
             model.addAttribute("title", "Log In");
             return "login";
         }
+
+        session.setAttribute("userId", theUser.getId());
         setUserInSession(request.getSession(), theUser);
 
 
