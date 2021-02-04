@@ -10,14 +10,12 @@ fieldset, label { margin: 0; padding: 0; }
 .rating > label:before {
   margin: 5px;
   font-size: 1.25em;
-  font-family: FontAwesome;
   display: inline-block;
-  content: "\f005";
 }
 
 .rating > label {
   color: #ddd;
- float: right;
+  float: right;
 }
 
 /***** Highlight Stars on Hover *****/
@@ -27,3 +25,21 @@ fieldset, label { margin: 0; padding: 0; }
 
 .rating > input:checked + label:hover, /* hover current star when changing rating */
 .rating > input:checked ~ label:hover,
+
+
+:checked{
+  color: #FFD700;
+}
+/***** Display Rating *****/
+.star-default{
+    color: #d6d7d8;
+}
+
+.hidden-star {
+    display: none !important;
+}
+
+.active-star {
+    color: #FFD700;
+    display: inline;
+}
